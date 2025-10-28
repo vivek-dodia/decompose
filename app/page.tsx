@@ -8,7 +8,6 @@ import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 
 export default function Home() {
-  const [username, setUsername] = useState("")
   const router = useRouter()
   const [glitchOffset, setGlitchOffset] = useState({ x: 0, y: 0 })
   const [selectedEffect, setSelectedEffect] = useState<number>(0)
@@ -77,17 +76,15 @@ export default function Home() {
     flicker()
   }, [selectedEffect])
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (username.trim()) {
-      router.push(`/roast?username=${encodeURIComponent(username)}`)
-    }
+  const handleSpotifyLogin = () => {
+    // Redirect to Spotify OAuth flow
+    window.location.href = '/api/auth/spotify'
   }
 
-  // Get effect-specific classes
+  // Get effect-specific classes for button
   const getEffectClasses = () => {
     const base =
-      "w-full pl-8 pr-40 py-5 bg-[#191414] rounded-xl text-white text-xl placeholder-[#535353] focus:outline-none focus:ring-0 transition-all duration-200 tracking-wide hover:rotate-1 focus:rotate-2 border-2 border-transparent hover:border-[#1DB954] focus:border-[#1ED760]"
+      "w-full px-8 py-6 bg-[#191414] rounded-xl text-white text-2xl font-semibold transition-all duration-200 tracking-wide hover:rotate-1 border-2 border-transparent hover:border-[#1DB954] cursor-pointer"
 
     switch (selectedEffect) {
       case 0: // Scanline overlay
@@ -98,8 +95,8 @@ export default function Home() {
         return `${base} shadow-[4px_4px_0px_0px_rgba(29,185,84,0.3)]`
       case 3: // Noise/grain
         return `${base} shadow-[4px_4px_0px_0px_rgba(29,185,84,0.3)]`
-      case 4: // Distortion on focus
-        return `${base} shadow-[4px_4px_0px_0px_rgba(29,185,84,0.3)] focus:scale-110 focus:skew-x-2`
+      case 4: // Distortion on hover
+        return `${base} shadow-[4px_4px_0px_0px_rgba(29,185,84,0.3)] hover:scale-110 hover:skew-x-2`
       case 5: // Cursor glow
         return `${base} shadow-[4px_4px_0px_0px_rgba(29,185,84,0.3)]`
       case 6: // Chromatic aberration
@@ -107,7 +104,7 @@ export default function Home() {
       case 7: // Flicker
         return `${base} shadow-[4px_4px_0px_0px_rgba(29,185,84,0.3)]`
       case 8: // All effects
-        return `${base} shadow-[8px_8px_0px_0px_rgba(255,0,255,0.5),-8px_-8px_0px_0px_rgba(0,255,255,0.5)] focus:scale-110`
+        return `${base} shadow-[8px_8px_0px_0px_rgba(255,0,255,0.5),-8px_-8px_0px_0px_rgba(0,255,255,0.5)] hover:scale-110`
       default:
         return base
     }
@@ -116,7 +113,7 @@ export default function Home() {
   const getEffectStyles = () => {
     const base: React.CSSProperties = {
       fontFamily: "var(--font-geist)",
-      fontWeight: 200,
+      fontWeight: 600,
       opacity: selectedEffect === 7 || selectedEffect === 8 ? flicker : 1,
     }
 
@@ -209,8 +206,7 @@ export default function Home() {
       <div className="flex flex-col items-center gap-[15vh] max-w-lg w-full mt-16">
         <MeshGradientSVG />
 
-        <motion.form
-          onSubmit={handleSubmit}
+        <motion.div
           className="w-full"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -235,7 +231,7 @@ export default function Home() {
             {/* Effect 1: Scanline overlay */}
             {(selectedEffect === 0 || selectedEffect === 8) && (
               <div
-                className="absolute inset-0 pointer-events-none z-20 opacity-30"
+                className="absolute inset-0 pointer-events-none z-20 opacity-30 rounded-xl"
                 style={{
                   backgroundImage:
                     "repeating-linear-gradient(0deg, rgba(0,0,0,0.5) 0px, rgba(0,0,0,0.5) 2px, transparent 2px, transparent 4px)",
@@ -260,23 +256,17 @@ export default function Home() {
               />
             )}
 
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="enter your spotify username"
+            <motion.button
+              onClick={handleSpotifyLogin}
               className={getEffectClasses()}
               style={getEffectStyles()}
-            />
-            <button
-              type="submit"
-              className="absolute right-2 top-1/2 -translate-y-1/2 px-6 py-2 bg-gradient-to-r from-[#1DB954] to-[#1ED760] text-[#191414] rounded-md hover:shadow-lg hover:shadow-[#1DB954]/50 hover:brightness-110 transition-all duration-300 hover:rotate-[-2deg] active:scale-95"
-              style={{ fontFamily: "var(--font-geist)", fontWeight: 200 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
             >
-              roast me
-            </button>
+              sign in with spotify
+            </motion.button>
           </motion.div>
-        </motion.form>
+        </motion.div>
       </div>
     </div>
   )

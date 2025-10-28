@@ -5,13 +5,31 @@ import { useSearchParams } from "next/navigation"
 import { motion } from "framer-motion"
 import { Suspense, useEffect, useState } from "react"
 
+interface RoastData {
+  musical_identity_crisis: string
+  the_receipts: string
+  playlist_crimes: string
+  background_music_for: string
+  aux_cord_evaluation: string
+  therapist_notes: string
+  fbi_watchlist: string
+  the_diagnosis: string
+}
+
+type TimeRange = 'short_term' | 'medium_term' | 'long_term'
+
 function RoastContent() {
   const searchParams = useSearchParams()
   const username = searchParams.get("username") || "Anonymous"
+  const accessToken = searchParams.get("access_token")
   const [selectedEffect, setSelectedEffect] = useState<number>(0)
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
   const [flicker, setFlicker] = useState(1)
   const [glitchOffset, setGlitchOffset] = useState({ x: 0, y: 0 })
+  const [roastData, setRoastData] = useState<RoastData | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [timeRange, setTimeRange] = useState<TimeRange>('medium_term')
   const titleText = "decompose"
   const usernameText = `@${username}'s spotify roast`
 
@@ -21,6 +39,43 @@ function RoastContent() {
     setSelectedEffect(randomEffect)
     console.log(`Roast page - Effect ${randomEffect + 1} activated!`)
   }, [])
+
+  // Fetch roast data
+  useEffect(() => {
+    const generateRoast = async () => {
+      if (!accessToken) {
+        setError("No access token found. Please log in again.")
+        setIsLoading(false)
+        return
+      }
+
+      try {
+        setIsLoading(true)
+        setError(null)
+        const response = await fetch('/api/generate-roast', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ accessToken, timeRange }),
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to generate roast')
+        }
+
+        const data = await response.json()
+        setRoastData(data.roasts)
+        setIsLoading(false)
+      } catch (err) {
+        console.error('Error generating roast:', err)
+        setError('Failed to generate roast. Please try again.')
+        setIsLoading(false)
+      }
+    }
+
+    generateRoast()
+  }, [accessToken, timeRange])
 
   // Effect 3: Micro-glitches
   useEffect(() => {
@@ -76,40 +131,40 @@ function RoastContent() {
     flicker()
   }, [selectedEffect])
 
-  const roasts = [
+  const roasts = roastData ? [
     {
       title: "Musical Identity Crisis",
-      content: `You definitely say "I listen to everything" but mean 2 artists. You've never had aux cord privileges and now we know why.`,
+      content: roastData.musical_identity_crisis,
     },
     {
       title: "The Receipts",
-      content: `You listened to the same song 847 times. That's not a song. That's a cry for help. Even the artist is concerned.`,
+      content: roastData.the_receipts,
     },
     {
       title: "Playlist Crimes",
-      content: `You named a playlist "sad boi hours" unironically. 147 songs titled "vibes" - which vibe? Depression?`,
+      content: roastData.playlist_crimes,
     },
     {
       title: "Background Music For...",
-      content: `Your top tracks are perfect for: crying in a Trader Joe's parking lot and pretending you're in a music video while doing laundry.`,
+      content: roastData.background_music_for,
     },
     {
       title: "Aux Cord Evaluation",
-      content: `Should you ever control the music? Road Trip: NO. Gym: NO. Party: NO. You'd clear the room faster than a fire alarm. Alone Forever: YES.`,
+      content: roastData.aux_cord_evaluation,
     },
     {
       title: "Therapist's Notes",
-      content: `You listened to the same breakup song 600 times. The breakup was 4 years ago. Your attachment style is "anxious" and so is everyone who hears your playlist.`,
+      content: roastData.therapist_notes,
     },
     {
       title: "FBI Watchlist Behavior",
-      content: `You listen to murder podcasts AND Nickelback. Your 3 AM activity looks like a serial killer's soundtrack. You're definitely on a government list now.`,
+      content: roastData.fbi_watchlist,
     },
     {
       title: "The Diagnosis",
-      content: `Medical Report: Terminal case of 2012 Tumblr aesthetic. Chronic "I'm not like other girls/guys" syndrome. Acute nostalgia paralysis.`,
+      content: roastData.the_diagnosis,
     },
-  ]
+  ] : []
 
   return (
     <div
@@ -165,7 +220,7 @@ function RoastContent() {
 
       {/* Title - Top Center */}
       <motion.div
-        className="text-center mb-8 mt-12"
+        className="text-center mb-4 mt-12"
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
@@ -186,6 +241,43 @@ function RoastContent() {
         >
           {usernameText}
         </p>
+      </motion.div>
+
+      {/* Time Range Filter */}
+      <motion.div
+        className="flex justify-center gap-3 mb-8 px-4"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.3 }}
+      >
+        {[
+          { label: '1 Month', value: 'short_term' as TimeRange, rotation: -1 },
+          { label: '6 Months', value: 'medium_term' as TimeRange, rotation: 0.5 },
+          { label: 'Lifetime', value: 'long_term' as TimeRange, rotation: -0.5 },
+        ].map((option) => (
+          <motion.button
+            key={option.value}
+            onClick={() => setTimeRange(option.value)}
+            className={`
+              relative px-6 py-2 rounded-lg font-semibold text-sm transition-all
+              border-2
+              ${timeRange === option.value
+                ? 'bg-[#1ED760] text-[#191414] border-[#1ED760] shadow-[3px_3px_0px_0px_rgba(29,185,84,0.5)]'
+                : 'bg-[#191414] text-[#1ED760] border-[#1ED760] shadow-[2px_2px_0px_0px_rgba(29,185,84,0.3)] hover:shadow-[3px_3px_0px_0px_rgba(29,185,84,0.4)]'
+              }
+            `}
+            style={{
+              fontFamily: "var(--font-geist)",
+              fontWeight: 500,
+              transform: `rotate(${option.rotation}deg)`
+            }}
+            whileHover={{ scale: 1.05, rotate: option.rotation * 2 }}
+            whileTap={{ scale: 0.95 }}
+            disabled={isLoading}
+          >
+            {option.label}
+          </motion.button>
+        ))}
       </motion.div>
 
       {/* Main Content - Ghost Left, Cards Right - Full Width */}
@@ -252,7 +344,33 @@ function RoastContent() {
 
         {/* Roast Cards - Right Side Grid - Full Width */}
         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6 w-full mt-10">
-          {roasts.map((roast, index) => {
+          {isLoading ? (
+            <div className="col-span-2 flex items-center justify-center min-h-[400px]">
+              <div className="text-center">
+                <div className="animate-pulse text-[#1ED760] text-2xl mb-4" style={{ fontFamily: "var(--font-bitcount)" }}>
+                  Analyzing your terrible taste...
+                </div>
+                <div className="text-gray-500" style={{ fontFamily: "var(--font-geist)" }}>
+                  This might take a moment. We need time to process this much cringe.
+                </div>
+              </div>
+            </div>
+          ) : error ? (
+            <div className="col-span-2 flex items-center justify-center min-h-[400px]">
+              <div className="text-center">
+                <div className="text-red-500 text-2xl mb-4" style={{ fontFamily: "var(--font-bitcount)" }}>
+                  Error: {error}
+                </div>
+                <a
+                  href="/"
+                  className="text-[#1ED760] underline hover:text-[#1DB954]"
+                  style={{ fontFamily: "var(--font-geist)" }}
+                >
+                  Try again
+                </a>
+              </div>
+            </div>
+          ) : roasts.map((roast, index) => {
             // Alternating slight rotations for unhinged effect
             const rotations = [0.5, -0.8, 0.6, -0.5, 0.7, -0.6, 0.4, -0.7]
 

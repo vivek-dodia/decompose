@@ -19,7 +19,10 @@ const geistFont = localFont({
 export const metadata: Metadata = {
   title: "decompose",
   description: "Roast your Spotify listening habits",
-    generator: 'v0.app'
+  generator: 'v0.app',
+  icons: {
+    icon: '/icon.svg',
+  },
 }
 
 export default function RootLayout({

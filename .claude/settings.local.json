@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(xcopy:*)",
-      "Bash(pnpm dev)"
+      "Bash(pnpm dev)",
+      "Bash(taskkill:*)"
     ],
     "deny": [],
     "ask": []
