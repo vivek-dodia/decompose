@@ -111,21 +111,9 @@ function RoastContent() {
     },
   ]
 
-  // Random positions and rotations for cards - organic scattered layout
-  const cardPositions = [
-    { top: '12%', left: '6%', rotate: -10, scale: 0.9 },
-    { top: '15%', left: '38%', rotate: 7, scale: 0.88 },
-    { top: '10%', left: '68%', rotate: -8, scale: 0.92 },
-    { top: '35%', left: '10%', rotate: 9, scale: 0.9 },
-    { top: '38%', left: '72%', rotate: -11, scale: 0.88 },
-    { top: '58%', left: '8%', rotate: 6, scale: 0.91 },
-    { top: '55%', left: '42%', rotate: -9, scale: 0.9 },
-    { top: '60%', left: '74%', rotate: 8, scale: 0.89 },
-  ]
-
   return (
     <div
-      className="h-screen bg-[#101010] p-4 relative overflow-hidden flex flex-col"
+      className="min-h-screen bg-[#191414] p-8 relative overflow-hidden"
       style={{
         opacity: selectedEffect === 7 || selectedEffect === 8 ? flicker : 1,
         transition: 'opacity 0.05s'
@@ -175,133 +163,69 @@ function RoastContent() {
         />
       )}
 
-      {/* Ghost and Button - Left Side Stack */}
-      <div className="fixed left-44 top-[30%] z-0 hidden lg:flex lg:flex-col lg:items-center lg:gap-14">
-        <motion.div
-          initial={{ opacity: 0, x: -100 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1 }}
-        >
-          <div className="w-80">
-            <MeshGradientSVG />
-          </div>
-        </motion.div>
-
-        <motion.div
-          animate={{
-            opacity: 1,
-            rotate: [-1.5, 1, -0.5, 1.5, -1],
-            scale: [1, 1.01, 1, 1.02, 1],
-            x: glitchOffset.x,
-            y: glitchOffset.y
-          }}
-          transition={{
-            opacity: { delay: 1.2, duration: 0.6 },
-            duration: 8,
-            repeat: Number.POSITIVE_INFINITY,
-            ease: "easeInOut",
-            x: { duration: 0.05 },
-            y: { duration: 0.05 }
-          }}
-          initial={{ opacity: 0 }}
-        >
-          {/* Scanline overlay */}
-          {(selectedEffect === 0 || selectedEffect === 8) && (
-            <div
-              className="absolute inset-0 pointer-events-none z-20 opacity-30 rounded-lg"
-              style={{
-                backgroundImage:
-                  "repeating-linear-gradient(0deg, rgba(0,0,0,0.5) 0px, rgba(0,0,0,0.5) 2px, transparent 2px, transparent 4px)",
-              }}
-            />
-          )}
-
-          {/* Animated gradient border */}
-          {(selectedEffect === 1 || selectedEffect === 8) && (
-            <div className="absolute -inset-1 bg-gradient-to-r from-[#1DB954] via-[#1ED760] to-[#1DB954] rounded-lg opacity-50 blur-sm animate-gradient-rotate" />
-          )}
-
-          <motion.a
-            href="/"
-            className="relative block px-8 py-3 bg-gradient-to-r from-[#1DB954] to-[#1ED760] text-[#191414] rounded-lg shadow-[4px_4px_0px_0px_rgba(29,185,84,0.3)] hover:shadow-[8px_8px_0px_0px_rgba(29,185,84,0.5)] transition-all duration-300"
-            style={{ fontFamily: "var(--font-geist)", fontWeight: 200 }}
-            whileHover={{ scale: 1.05, rotate: 2 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            roast another victim
-          </motion.a>
-        </motion.div>
-      </div>
-
-      {/* Title - Centered at Top */}
+      {/* Title - Top Center */}
       <motion.div
-        className="relative z-10 text-center mb-4"
-        initial={{ opacity: 0, y: -50 }}
+        className="text-center mb-8 mt-12"
+        initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
         <h1
-          className="text-6xl md:text-7xl tracking-wider mb-3"
-          style={{ fontFamily: "var(--font-bitcount)", fontWeight: 300 }}
+          className="text-5xl md:text-6xl tracking-wider mb-2"
+          style={{
+            fontFamily: "var(--font-bitcount)",
+            fontWeight: 300,
+            color: '#1ED760'
+          }}
         >
-          {titleText.split("").map((char, index) => (
-            <span
-              key={index}
-              className="bg-gradient-to-r from-[#1DB954] via-[#1ED760] to-[#1DB954] bg-clip-text text-transparent animate-gradient inline-block"
-            >
-              {char}
-            </span>
-          ))}
+          {titleText}
         </h1>
-        <p className="text-[#535353] text-xl" style={{ fontFamily: "var(--font-geist)", fontWeight: 200 }}>
+        <p
+          className="text-gray-500 text-lg"
+          style={{ fontFamily: "var(--font-geist)", fontWeight: 200 }}
+        >
           {usernameText}
         </p>
       </motion.div>
 
-      {/* Scattered Cards - Pinboard Chaos */}
-      <div className="relative z-10 flex-1 max-w-7xl mx-auto w-full">
-        {roasts.map((roast, index) => (
+      {/* Main Content - Ghost Left, Cards Right - Full Width */}
+      <div className="flex flex-col lg:flex-row gap-12 items-center justify-between px-4 lg:px-16 mt-8">
+        {/* Ghost SVG - Left Side with Button */}
+        <div className="flex-shrink-0 flex flex-col items-center gap-12">
           <motion.div
-            key={index}
-            className="absolute w-[380px] rounded-2xl p-6 bg-gradient-to-br from-[#1a1a1a] to-[#252525] shadow-[8px_8px_0px_0px_rgba(29,185,84,0.3)] hover:shadow-[12px_12px_0px_0px_rgba(29,185,84,0.5)] cursor-pointer"
-            style={{
-              top: cardPositions[index].top,
-              left: cardPositions[index].left,
-              rotate: `${cardPositions[index].rotate}deg`,
-              opacity: selectedEffect === 7 || selectedEffect === 8 ? flicker : 1,
-              backgroundImage: (selectedEffect === 3 || selectedEffect === 8)
-                ? "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E\"), linear-gradient(135deg, #1a1a1a, #252525)"
-                : undefined,
-            }}
-            initial={{ opacity: 0, y: -100, rotate: 0 }}
+            initial={{ opacity: 0, x: -100 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1 }}
+          >
+            <div className="w-80 lg:w-96">
+              <MeshGradientSVG />
+            </div>
+          </motion.div>
+
+          {/* Button - Below Ghost with Effects */}
+          <motion.div
+            className="relative"
+            initial={{ opacity: 0, y: 30 }}
             animate={{
               opacity: 1,
-              y: [0, -10, 0],
-              rotate: cardPositions[index].rotate,
-              scale: cardPositions[index].scale,
+              y: 0,
+              rotate: [-1.5, 1, -0.5, 1.5, -1],
+              scale: [1, 1.01, 1, 1.02, 1],
+              x: glitchOffset.x,
             }}
             transition={{
-              opacity: { delay: index * 0.15, duration: 0.5 },
-              y: {
-                delay: index * 0.15 + 0.5,
-                duration: 3 + index * 0.5,
-                repeat: Infinity,
-                ease: "easeInOut",
-              },
-              rotate: { delay: index * 0.15, duration: 0.6 },
-              scale: { delay: index * 0.15, duration: 0.6 },
-            }}
-            whileHover={{
-              scale: (selectedEffect === 4 || selectedEffect === 8) ? 1.15 : 1.1,
-              rotate: 0,
-              zIndex: 50,
-              transition: { duration: 0.2 },
+              opacity: { delay: 1, duration: 0.6 },
+              y: { delay: 1, duration: 0.6 },
+              duration: 8,
+              repeat: Number.POSITIVE_INFINITY,
+              ease: "easeInOut",
+              x: { duration: 0.05 },
             }}
           >
             {/* Scanline overlay */}
             {(selectedEffect === 0 || selectedEffect === 8) && (
               <div
-                className="absolute inset-0 pointer-events-none z-20 opacity-20 rounded-2xl"
+                className="absolute inset-0 pointer-events-none z-20 opacity-30 rounded-lg"
                 style={{
                   backgroundImage:
                     "repeating-linear-gradient(0deg, rgba(0,0,0,0.5) 0px, rgba(0,0,0,0.5) 2px, transparent 2px, transparent 4px)",
@@ -311,34 +235,82 @@ function RoastContent() {
 
             {/* Animated gradient border */}
             {(selectedEffect === 1 || selectedEffect === 8) && (
-              <div className="absolute -inset-1 bg-gradient-to-r from-[#1DB954] via-[#1ED760] to-[#1DB954] rounded-2xl opacity-40 blur-sm animate-gradient-rotate -z-10" />
+              <div className="absolute -inset-1 bg-gradient-to-r from-[#1DB954] via-[#1ED760] to-[#1DB954] rounded-lg opacity-50 blur-sm animate-gradient-rotate" />
             )}
 
-            {/* Chromatic aberration shadow */}
-            {(selectedEffect === 6 || selectedEffect === 8) && (
-              <div
-                className="absolute inset-0 pointer-events-none rounded-2xl"
-                style={{
-                  boxShadow: "inset 0 0 60px rgba(255,0,255,0.1), inset 0 0 60px rgba(0,255,255,0.1)",
-                }}
-              />
-            )}
-
-            <h3
-              className="text-[#1ED760] text-xl mb-3 relative z-10"
-              style={{ fontFamily: "var(--font-geist)", fontWeight: 200 }}
+            <motion.a
+              href="/"
+              className="relative block px-8 py-3 bg-[#1ED760] text-[#191414] rounded-lg font-semibold text-lg hover:bg-[#1DB954] transition-all shadow-[4px_4px_0px_0px_rgba(29,185,84,0.3)] hover:shadow-[6px_6px_0px_0px_rgba(29,185,84,0.5)]"
+              style={{ fontFamily: "var(--font-geist)", fontWeight: 500 }}
+              whileHover={{ scale: 1.05, rotate: 2 }}
+              whileTap={{ scale: 0.95 }}
             >
-              {roast.title}
-            </h3>
-            <p
-              className="text-white/90 leading-relaxed text-base relative z-10"
-              style={{ fontFamily: "var(--font-geist)", fontWeight: 200 }}
-            >
-              {roast.content}
-            </p>
+              roast another victim
+            </motion.a>
           </motion.div>
-        ))}
+        </div>
 
+        {/* Roast Cards - Right Side Grid - Full Width */}
+        <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6 w-full mt-10">
+          {roasts.map((roast, index) => {
+            // Alternating slight rotations for unhinged effect
+            const rotations = [0.5, -0.8, 0.6, -0.5, 0.7, -0.6, 0.4, -0.7]
+
+            return (
+              <motion.div
+                key={index}
+                className="relative group"
+                initial={{ opacity: 0, y: 20, rotate: 0 }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                  rotate: rotations[index]
+                }}
+                transition={{ delay: index * 0.1, duration: 0.5 }}
+                whileHover={{
+                  rotate: 0,
+                  scale: 1.03,
+                  transition: { duration: 0.2 }
+                }}
+                style={{
+                  rotate: `${rotations[index]}deg`,
+                }}
+              >
+                {/* Glitchy border effect on hover */}
+                {(selectedEffect === 1 || selectedEffect === 8) && (
+                  <div className="absolute -inset-1 bg-gradient-to-r from-[#1DB954] via-[#1ED760] to-[#1DB954] rounded-xl opacity-0 group-hover:opacity-50 blur-sm animate-gradient-rotate transition-opacity" />
+                )}
+
+                <div
+                  className="bg-[#191414] p-8 rounded-xl border-2 border-[#1ED760] shadow-[4px_4px_0px_0px_rgba(29,185,84,0.3)] hover:shadow-[6px_6px_0px_0px_rgba(29,185,84,0.5)] transition-all relative min-h-[220px] flex flex-col"
+                  style={{
+                    transform: `rotate(${rotations[index] * 0.5}deg)`,
+                  }}
+                >
+                  <h3
+                    className="text-[#1ED760] text-xl md:text-2xl font-bold mb-4"
+                    style={{
+                      fontFamily: "var(--font-bitcount)",
+                      fontWeight: 600,
+                      textShadow: "0 0 10px rgba(29,185,84,0.3)",
+                    }}
+                  >
+                    {roast.title}
+                  </h3>
+                  <p
+                    className="text-gray-400 text-base leading-relaxed"
+                    style={{
+                      fontFamily: "var(--font-geist)",
+                      fontWeight: 200,
+                    }}
+                  >
+                    {roast.content}
+                  </p>
+                </div>
+              </motion.div>
+            )
+          })}
+        </div>
       </div>
 
     </div>
@@ -347,7 +319,7 @@ function RoastContent() {
 
 export default function RoastPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#101010]" />}>
+    <Suspense fallback={<div className="min-h-screen bg-[#191414]" />}>
       <RoastContent />
     </Suspense>
   )

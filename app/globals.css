@@ -77,6 +77,69 @@
     background-size: 200% 200%;
     animation: gradient-rotate 3s ease infinite;
   }
+
+  /* Custom scrollbar for CRT screen */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(29, 185, 84, 0.1);
+    border-radius: 4px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(29, 185, 84, 0.5);
+    border-radius: 4px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(29, 185, 84, 0.7);
+  }
+
+  /* CRT Screen Curve Effect */
+  .crt-screen {
+    transform-style: preserve-3d;
+    perspective: 1000px;
+  }
+
+  .crt-screen-inner {
+    transform: perspective(400px) rotateX(0deg);
+    border-radius: 2rem;
+    position: relative;
+  }
+
+  .crt-screen-inner::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: inherit;
+    border-radius: 2rem;
+    filter: blur(20px);
+    opacity: 0.5;
+    z-index: -1;
+  }
+
+  /* Barrel distortion simulation */
+  .crt-content {
+    transform: scale(1.02);
+    filter: contrast(1.05) brightness(1.05);
+  }
+
+  @keyframes crt-flicker {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.97; }
+  }
+
+  /* CRT Screen Bulge Effect */
+  @supports (clip-path: polygon(0 0)) {
+    .crt-bulge {
+      clip-path: polygon(
+        0% 2%, 2% 0%, 98% 0%, 100% 2%,
+        100% 98%, 98% 100%, 2% 100%, 0% 98%
+      );
+    }
+  }
 }
 
 @layer base {
