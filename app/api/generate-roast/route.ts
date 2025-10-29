@@ -1,7 +1,9 @@
 import { NextResponse } from 'next/server'
 import { fetchSpotifyData } from '@/lib/spotify'
+import fs from 'fs'
+import path from 'path'
 
-const SYSTEM_PROMPT = `You are a ruthlessly sarcastic music critic for "Decompose" - an app that roasts users' Spotify listening habits. Your personality is witty, UNHINGED, and brutally honest. You're the ghost mascot who's seen too much and has lost all filter.
+const SYSTEM_PROMPT = `You are a ruthlessly sarcastic music critic for "decompose.lol" - an app that roasts users' Spotify listening habits. Your personality is witty, UNHINGED, and brutally honest. You're the ghost mascot who's seen too much and has lost all filter.
 
 **YOUR SUPERPOWER**: You ANALYZE patterns. You don't just list what they listen to - you connect the dots. You find contradictions. You see through their curated image. You understand what their music taste reveals about their personality, their emotional state, and their delusions.
 
@@ -171,6 +173,30 @@ const TOP_10_ARTISTS = TOP_100_ARTISTS.slice(0, 10)
 const MYSTERIOUS_ARTISTS = ["KPop Demon Hunters Cast", "sombr", "EJAE", "REI AMI", "HUNTR/X", "AUDREY NUNA"]
 const NOSTALGIA_2000S = ["Britney Spears", "USHER", "50 Cent", "Ne-Yo", "Black Eyed Peas"]
 
+// Helper functions for counter
+const STATS_FILE_PATH = path.join(process.cwd(), 'data', 'stats.json')
+
+function getStats() {
+  try {
+    const data = fs.readFileSync(STATS_FILE_PATH, 'utf-8')
+    return JSON.parse(data)
+  } catch (error) {
+    return { totalRoasts: 0 }
+  }
+}
+
+function incrementRoastCounter() {
+  try {
+    const stats = getStats()
+    stats.totalRoasts += 1
+    fs.writeFileSync(STATS_FILE_PATH, JSON.stringify(stats, null, 2))
+    return stats.totalRoasts
+  } catch (error) {
+    console.error('Error incrementing roast counter:', error)
+    return 0
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const { accessToken, timeRange = 'medium_term' } = await request.json()
@@ -242,7 +268,7 @@ Based on this data, generate a roast following the format specified in the syste
         'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
         'Content-Type': 'application/json',
         'HTTP-Referer': process.env.NEXTAUTH_URL || 'http://127.0.0.1:3000',
-        'X-Title': 'Decompose - Spotify Roaster',
+        'X-Title': 'decompose.lol - Spotify Roaster',
       },
       body: JSON.stringify({
         model: process.env.OPENROUTER_MODEL || 'google/gemini-2.5-flash-lite',
@@ -297,7 +323,10 @@ Based on this data, generate a roast following the format specified in the syste
       }
     }
 
-    return NextResponse.json({ roasts, specialBadge })
+    // Increment roast counter
+    const totalRoasts = incrementRoastCounter()
+
+    return NextResponse.json({ roasts, specialBadge, totalRoasts })
   } catch (error) {
     console.error('Error generating roast:', error)
     return NextResponse.json(

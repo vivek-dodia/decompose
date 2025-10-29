@@ -17,7 +17,7 @@ const geistFont = localFont({
 })
 
 export const metadata: Metadata = {
-  title: "decompose",
+  title: "decompose.lol",
   description: "Roast your Spotify listening habits",
   generator: 'v0.app',
   icons: {

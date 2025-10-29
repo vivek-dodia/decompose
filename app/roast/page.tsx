@@ -32,7 +32,8 @@ function RoastContent() {
   const [timeRange, setTimeRange] = useState<TimeRange>('medium_term')
   const [loadingMessageIndex, setLoadingMessageIndex] = useState(0)
   const [specialBadge, setSpecialBadge] = useState<string>("")
-  const titleText = "decompose"
+  const [totalRoasts, setTotalRoasts] = useState<number>(0)
+  const titleText = "decompose.lol"
   const usernameText = `@${username}'s spotify roast`
 
   // Unhinged loading messages
@@ -91,6 +92,7 @@ function RoastContent() {
         const data = await response.json()
         setRoastData(data.roasts)
         setSpecialBadge(data.specialBadge || "")
+        setTotalRoasts(data.totalRoasts || 0)
         setIsLoading(false)
       } catch (err) {
         console.error('Error generating roast:', err)
@@ -268,50 +270,13 @@ function RoastContent() {
         </p>
       </motion.div>
 
-      {/* Time Range Filter */}
-      <motion.div
-        className="flex justify-center gap-3 mb-8 px-4"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.3 }}
-      >
-        {[
-          { label: '1 Month', value: 'short_term' as TimeRange, rotation: -1 },
-          { label: '6 Months', value: 'medium_term' as TimeRange, rotation: 0.5 },
-          { label: 'Lifetime', value: 'long_term' as TimeRange, rotation: -0.5 },
-        ].map((option) => (
-          <motion.button
-            key={option.value}
-            onClick={() => setTimeRange(option.value)}
-            className={`
-              relative px-6 py-2 rounded-lg font-semibold text-sm transition-all
-              border-2
-              ${timeRange === option.value
-                ? 'bg-[#1ED760] text-[#191414] border-[#1ED760] shadow-[3px_3px_0px_0px_rgba(29,185,84,0.5)]'
-                : 'bg-[#191414] text-[#1ED760] border-[#1ED760] shadow-[2px_2px_0px_0px_rgba(29,185,84,0.3)] hover:shadow-[3px_3px_0px_0px_rgba(29,185,84,0.4)]'
-              }
-            `}
-            style={{
-              fontFamily: "var(--font-geist)",
-              fontWeight: 500,
-              transform: `rotate(${option.rotation}deg)`
-            }}
-            whileHover={{ scale: 1.05, rotate: option.rotation * 2 }}
-            whileTap={{ scale: 0.95 }}
-            disabled={isLoading}
-          >
-            {option.label}
-          </motion.button>
-        ))}
-      </motion.div>
-
       {/* Special Badge Display */}
       {specialBadge && !isLoading && (
         <motion.div
-          className="flex justify-center px-4 mb-8"
+          className="flex justify-center px-4 mb-4"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
+          transition={{ duration: 0.5, delay: 0 }}
         >
           <div className="bg-[#191414] border-2 border-[#1ED760] rounded-lg px-6 py-4 shadow-[4px_4px_0px_0px_rgba(29,185,84,0.4)] max-w-2xl">
             <p
@@ -328,9 +293,79 @@ function RoastContent() {
       )}
 
       {/* Main Content - Ghost Left, Cards Right - Full Width */}
-      <div className="flex flex-col lg:flex-row gap-12 items-center justify-between px-4 lg:px-16 mt-8">
-        {/* Ghost SVG - Left Side with Button */}
-        <div className="flex-shrink-0 flex flex-col items-center gap-12">
+      <div className="flex flex-col lg:flex-row gap-12 items-start justify-between px-4 lg:px-16 mt-8">
+        {/* Ghost SVG - Left Side with Controls */}
+        <div className="flex-shrink-0 flex flex-col items-center gap-8 lg:items-start">
+
+          {/* Time Range Filter */}
+          <motion.div
+            className="flex gap-3"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0 }}
+          >
+            {[
+              { label: '1 Month', value: 'short_term' as TimeRange, rotation: -1 },
+              { label: '6 Months', value: 'medium_term' as TimeRange, rotation: 0.5 },
+              { label: 'Lifetime', value: 'long_term' as TimeRange, rotation: -0.5 },
+            ].map((option) => (
+              <motion.button
+                key={option.value}
+                onClick={() => setTimeRange(option.value)}
+                className={`
+                  relative px-6 py-2 rounded-lg font-semibold text-sm transition-all
+                  border-2
+                  ${timeRange === option.value
+                    ? 'bg-[#1ED760] text-[#191414] border-[#1ED760] shadow-[3px_3px_0px_0px_rgba(29,185,84,0.5)]'
+                    : 'bg-[#191414] text-[#1ED760] border-[#1ED760] shadow-[2px_2px_0px_0px_rgba(29,185,84,0.3)] hover:shadow-[3px_3px_0px_0px_rgba(29,185,84,0.4)]'
+                  }
+                `}
+                style={{
+                  fontFamily: "var(--font-geist)",
+                  fontWeight: 500,
+                  transform: `rotate(${option.rotation}deg)`
+                }}
+                whileHover={{ scale: 1.05, rotate: option.rotation * 2 }}
+                whileTap={{ scale: 0.95 }}
+                disabled={isLoading}
+              >
+                {option.label}
+              </motion.button>
+            ))}
+          </motion.div>
+
+          {/* Roast Counter */}
+          {totalRoasts > 0 && !isLoading && (
+            <motion.div
+              className="w-full"
+              initial={{ opacity: 0, y: 10, rotate: 0 }}
+              animate={{ opacity: 1, y: 0, rotate: -0.8 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+            >
+              <div className="bg-[#191414] border-2 border-[#1ED760] rounded-lg px-4 py-3 shadow-[3px_3px_0px_0px_rgba(29,185,84,0.4)] text-left">
+                <p
+                  className="text-gray-400 text-sm mb-1"
+                  style={{
+                    fontFamily: "var(--font-geist)",
+                    fontWeight: 300,
+                  }}
+                >
+                  You're the <span className="text-[#1ED760] font-semibold">{totalRoasts.toLocaleString()}</span>{totalRoasts === 1 ? 'st' : totalRoasts === 2 ? 'nd' : totalRoasts === 3 ? 'rd' : 'th'} person roasted
+                </p>
+                <p
+                  className="text-gray-500 text-xs"
+                  style={{
+                    fontFamily: "var(--font-geist)",
+                    fontWeight: 300,
+                  }}
+                >
+                  Avg therapy bills: $∞
+                </p>
+              </div>
+            </motion.div>
+          )}
+
+          {/* Ghost SVG */}
           <motion.div
             initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}
@@ -390,7 +425,7 @@ function RoastContent() {
         </div>
 
         {/* Roast Cards - Right Side Grid - Full Width */}
-        <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6 w-full mt-10">
+        <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
           {isLoading ? (
             <div className="col-span-2 flex items-center justify-center min-h-[400px]">
               <div className="text-center">

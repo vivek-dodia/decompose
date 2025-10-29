@@ -13,7 +13,7 @@ export default function Home() {
   const [selectedEffect, setSelectedEffect] = useState<number>(0)
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
   const [flicker, setFlicker] = useState(1)
-  const text = "decompose"
+  const text = "decompose.lol"
 
   // Randomly select effect on page load
   useEffect(() => {
