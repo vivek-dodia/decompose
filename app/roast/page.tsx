@@ -30,8 +30,21 @@ function RoastContent() {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [timeRange, setTimeRange] = useState<TimeRange>('medium_term')
+  const [loadingMessageIndex, setLoadingMessageIndex] = useState(0)
+  const [specialBadge, setSpecialBadge] = useState<string>("")
   const titleText = "decompose"
   const usernameText = `@${username}'s spotify roast`
+
+  // Unhinged loading messages
+  const loadingMessages = [
+    { main: "Analyzing your terrible taste...", sub: "This might take a moment. We need time to process this much cringe." },
+    { main: "Consulting the therapy bills...", sub: "Your listening history is... concerning." },
+    { main: "Contacting your ex for confirmation...", sub: "They said they're not surprised." },
+    { main: "Cross-referencing with FBI database...", sub: "Multiple red flags detected." },
+    { main: "Your friends are being notified...", sub: "They already knew, tbh." },
+    { main: "Calculating emotional damage...", sub: "The numbers don't look good." },
+    { main: "Spotify's algorithm is crying...", sub: "You broke it. Congratulations." },
+  ]
 
   // Randomly select effect on page load
   useEffect(() => {
@@ -39,6 +52,17 @@ function RoastContent() {
     setSelectedEffect(randomEffect)
     console.log(`Roast page - Effect ${randomEffect + 1} activated!`)
   }, [])
+
+  // Cycle through loading messages
+  useEffect(() => {
+    if (!isLoading) return
+
+    const interval = setInterval(() => {
+      setLoadingMessageIndex((prev) => (prev + 1) % loadingMessages.length)
+    }, 2500) // Change message every 2.5 seconds
+
+    return () => clearInterval(interval)
+  }, [isLoading, loadingMessages.length])
 
   // Fetch roast data
   useEffect(() => {
@@ -66,6 +90,7 @@ function RoastContent() {
 
         const data = await response.json()
         setRoastData(data.roasts)
+        setSpecialBadge(data.specialBadge || "")
         setIsLoading(false)
       } catch (err) {
         console.error('Error generating roast:', err)
@@ -280,6 +305,28 @@ function RoastContent() {
         ))}
       </motion.div>
 
+      {/* Special Badge Display */}
+      {specialBadge && !isLoading && (
+        <motion.div
+          className="flex justify-center px-4 mb-8"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+        >
+          <div className="bg-[#191414] border-2 border-[#1ED760] rounded-lg px-6 py-4 shadow-[4px_4px_0px_0px_rgba(29,185,84,0.4)] max-w-2xl">
+            <p
+              className="text-[#1ED760] text-center text-base md:text-lg leading-relaxed"
+              style={{
+                fontFamily: "var(--font-geist)",
+                fontWeight: 400,
+              }}
+            >
+              {specialBadge}
+            </p>
+          </div>
+        </motion.div>
+      )}
+
       {/* Main Content - Ghost Left, Cards Right - Full Width */}
       <div className="flex flex-col lg:flex-row gap-12 items-center justify-between px-4 lg:px-16 mt-8">
         {/* Ghost SVG - Left Side with Button */}
@@ -347,12 +394,27 @@ function RoastContent() {
           {isLoading ? (
             <div className="col-span-2 flex items-center justify-center min-h-[400px]">
               <div className="text-center">
-                <div className="animate-pulse text-[#1ED760] text-2xl mb-4" style={{ fontFamily: "var(--font-bitcount)" }}>
-                  Analyzing your terrible taste...
-                </div>
-                <div className="text-gray-500" style={{ fontFamily: "var(--font-geist)" }}>
-                  This might take a moment. We need time to process this much cringe.
-                </div>
+                <motion.div
+                  key={loadingMessageIndex}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.5 }}
+                  className="animate-pulse text-[#1ED760] text-2xl mb-4"
+                  style={{ fontFamily: "var(--font-bitcount)" }}
+                >
+                  {loadingMessages[loadingMessageIndex].main}
+                </motion.div>
+                <motion.div
+                  key={`sub-${loadingMessageIndex}`}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  className="text-gray-500"
+                  style={{ fontFamily: "var(--font-geist)" }}
+                >
+                  {loadingMessages[loadingMessageIndex].sub}
+                </motion.div>
               </div>
             </div>
           ) : error ? (
