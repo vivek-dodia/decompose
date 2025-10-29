@@ -48,7 +48,7 @@ If certain data is missing, roast them for that instead:
 - Generic top 40 only? → "The algorithm gave up on you. You're musically unsalvageable."
 
 OUTPUT STRUCTURE:
-Generate exactly these 8 sections with MAXIMUM CHAOS. **Keep each section to 5-7 SHORT punchy bullet points (max ~600-800 characters total per section)** to fill the cards completely:
+Generate exactly these 8 sections with MAXIMUM CHAOS. **Keep each section to 5-6 SHORT punchy bullet points (max ~500-700 characters total per section)** to fill the cards completely:
 
 1. MUSICAL IDENTITY CRISIS
 - Analyze their ACTUAL genre spread vs what they probably claim
@@ -119,7 +119,7 @@ CRITICAL RULES - READ THIS CAREFULLY:
   - "You follow 1 artist but have 20 playlists" → what does this say?
   - "All your top songs are from 2015" → you're stuck in the past
   - "Playlist called 'workout' but it's all The Weeknd" → delusion detected
-- **Keep each section to 5-7 SHORT punchy bullet points (600-800 chars total)**
+- **Keep each section to 5-6 SHORT punchy bullet points (500-700 chars total)**
 - **DON'T FABRICATE NUMBERS**: No fake play counts. Use relative language:
   - "#1 most played song" ✓  vs "You played X 900 times" ✗
   - "Dominates your top 5" ✓  vs "You listened 500 times" ✗

@@ -18,6 +18,147 @@ interface RoastData {
 
 type TimeRange = 'short_term' | 'medium_term' | 'long_term'
 
+// Easter egg function for time/date based messages
+function getEasterEgg(): string {
+  const now = new Date()
+  const hour = now.getHours()
+  const day = now.getDay() // 0 = Sunday, 1 = Monday, etc.
+  const date = now.getDate()
+  const month = now.getMonth() // 0 = January, 1 = February, etc.
+
+  // Helper to check if it's a weekday
+  const isWeekday = day >= 1 && day <= 5
+  const isWeekend = day === 0 || day === 6
+
+  // Super specific time combos (check first for priority)
+  if (hour >= 3 && hour < 5 && isWeekday) {
+    return "3 AM on a weekday. Either insomnia or poor life choices. Your music suggests both."
+  }
+  if (hour >= 3 && hour < 5 && day === 0) {
+    return "3 AM on a Sunday. The existential dread is real. So is your bad taste."
+  }
+  if (hour >= 3 && hour < 5 && isWeekend) {
+    return "3 AM weekend browsing. Either just got home or never left. Both sad."
+  }
+  if (hour === 9 && day === 1) {
+    return "Monday 9 AM roast session. Starting the week with emotional damage. Bold."
+  }
+  if ((hour === 17 || hour === 18) && day === 5) {
+    return "Happy Hour and you're here? Your social life needs more help than your playlists."
+  }
+
+  // Obscure date-based
+  if (month === 1 && date === 29) {
+    return "Leap Day only comes every 4 years. Unlike your music taste, which is consistently bad."
+  }
+  if (month === 3 && date === 1) {
+    return "April Fools! Just kidding, your music taste really is this bad."
+  }
+  if (month === 3 && date === 15) {
+    return "Tax Day and getting roasted? At least the IRS can't audit your terrible playlists."
+  }
+  if (month === 4 && date === 4) {
+    return "May the 4th be with you. Your music taste? Not so much."
+  }
+  if ((month === 5 && date === 21) || (month === 11 && date === 21)) {
+    const season = month === 5 ? "Longest" : "Shortest"
+    return `${season} day of the year and you're spending it getting roasted. Time well spent.`
+  }
+  if (month === 6 && date === 4) {
+    return "Celebrating independence while being enslaved to the same 5 artists. Ironic."
+  }
+  if (month === 9 && date === 31) {
+    return "Your music taste is the real horror story this Halloween."
+  }
+  if (month === 10 && date === 1) {
+    return "Post-Halloween sugar crash or just your music taste hitting rock bottom?"
+  }
+  if (month === 1 && date === 14) {
+    return "Valentine's Day roast? Your love life is as empty as your good playlists."
+  }
+  if (month === 2 && date === 14) {
+    return "Pi Day: 3.14159... The number of people who respect your music taste: 0."
+  }
+  if (month === 3 && date === 20) {
+    return "420 and getting roasted in a different way. Your music taste is still the bigger problem."
+  }
+  if (date === 13 && day === 5) {
+    return "Friday the 13th. Your music taste is the real horror story."
+  }
+
+  // Black Friday (4th Friday of November)
+  if (month === 10 && day === 5 && date >= 23 && date <= 29) {
+    return "Black Friday deals on therapy for your music taste. You need it."
+  }
+
+  // Cyber Monday (Monday after Black Friday)
+  if (month === 10 && day === 1 && date >= 26 && date <= 30) {
+    return "Shopping online and getting roasted. Your credit card AND ego taking hits today."
+  }
+
+  // Labor Day (first Monday in September)
+  if (month === 8 && day === 1 && date <= 7) {
+    return "Labor Day weekend and you're working on... getting roasted? Productive."
+  }
+
+  // Thanksgiving week (4th Thursday of November)
+  if (month === 10 && day === 4 && date >= 22 && date <= 28) {
+    return "Giving thanks? Maybe thank Spotify for trying despite your terrible taste."
+  }
+
+  // December holiday season
+  if (month === 11 && date >= 1 && date <= 10) {
+    return "Spotify Wrapped drops soon. Prepare for public embarrassment."
+  }
+  if (month === 11 && date >= 11 && date <= 23) {
+    return "Already shared your Wrapped? Everyone's judging you. We warned you."
+  }
+  if (month === 11 && date === 24) {
+    return "Christmas Eve roast session. Santa's checking his list. You're on the naughty one."
+  }
+  if (month === 11 && date === 25) {
+    return "Merry Christmas! Your gift is brutal honesty about your music taste."
+  }
+  if (month === 11 && date === 31) {
+    return "New Year's Eve and you're here. Your plans are as sad as your top tracks."
+  }
+
+  // New Year period
+  if (month === 0 && date <= 7) {
+    return "New year, same terrible music taste. Some things never change."
+  }
+
+  // Time-based (general)
+  if (hour >= 3 && hour < 5) {
+    return "3 AM and reading your roast? This checks out. Your sleep schedule is as broken as your music taste."
+  }
+  if (hour >= 5 && hour < 8) {
+    return "Up before 8 AM on purpose? Either morning person or never went to sleep. Both are concerning."
+  }
+  if (hour >= 9 && hour <= 17 && isWeekday) {
+    return "Reading this during work hours? Your productivity is as questionable as your playlists."
+  }
+  if (hour >= 12 && hour < 13) {
+    return "Lunch break roast session. Bold choice. Your coworkers are judging you."
+  }
+  if (hour >= 23 || hour < 3) {
+    return "Past midnight and still scrolling? Your FBI agent is taking notes."
+  }
+
+  // Day-based
+  if (day === 1) {
+    return "It's Monday and you're getting roasted. Your week is off to a great start."
+  }
+  if (day === 5 && hour >= 18) {
+    return "Friday night and you're here? Your weekend plans are as sad as your top tracks."
+  }
+  if (day === 0 && hour >= 20) {
+    return "Sunday night existential crisis + Spotify roast = therapy bills incoming."
+  }
+
+  return ""
+}
+
 function RoastContent() {
   const searchParams = useSearchParams()
   const username = searchParams.get("username") || "Anonymous"
@@ -33,6 +174,12 @@ function RoastContent() {
   const [loadingMessageIndex, setLoadingMessageIndex] = useState(0)
   const [specialBadge, setSpecialBadge] = useState<string>("")
   const [totalRoasts, setTotalRoasts] = useState<number>(0)
+  const [easterEgg, setEasterEgg] = useState<string>("")
+  const [easterEggExpanded, setEasterEggExpanded] = useState<boolean>(false)
+  const [metaRoast, setMetaRoast] = useState<string>("")
+  const [timeRangeSwitches, setTimeRangeSwitches] = useState<number>(0)
+  const [easterEggClicks, setEasterEggClicks] = useState<number>(0)
+  const [pageLoadTime, setPageLoadTime] = useState<number>(Date.now())
   const titleText = "decompose.lol"
   const usernameText = `@${username}'s spotify roast`
 
@@ -53,6 +200,71 @@ function RoastContent() {
     setSelectedEffect(randomEffect)
     console.log(`Roast page - Effect ${randomEffect + 1} activated!`)
   }, [])
+
+  // Set easter egg on mount
+  useEffect(() => {
+    const egg = getEasterEgg()
+    setEasterEgg(egg)
+  }, [])
+
+  // Check for return visitor
+  useEffect(() => {
+    const hasVisited = localStorage.getItem('decompose_visited')
+    if (hasVisited) {
+      setMetaRoast("Back for more? Either brave or masochistic.")
+    } else {
+      localStorage.setItem('decompose_visited', 'true')
+    }
+  }, [])
+
+  // Track time on page for meta-roasts
+  useEffect(() => {
+    const checkTime = setInterval(() => {
+      const timeOnPage = (Date.now() - pageLoadTime) / 1000 / 60 // in minutes
+
+      if (timeOnPage >= 15 && !metaRoast) {
+        setMetaRoast("You've been reading this for 15 minutes. This is the most attention your music taste has ever gotten.")
+      } else if (timeOnPage >= 10 && !metaRoast) {
+        setMetaRoast("10 minutes of staring at the truth. Still in denial?")
+      } else if (timeOnPage >= 5 && !metaRoast) {
+        setMetaRoast("5 minutes of denial. The truth is still the truth.")
+      } else if (timeOnPage >= 3 && !metaRoast) {
+        setMetaRoast("Still here? The roasts don't get better with time. Neither does your taste.")
+      }
+    }, 30000) // Check every 30 seconds
+
+    return () => clearInterval(checkTime)
+  }, [pageLoadTime, metaRoast])
+
+  // Track easter egg clicks
+  const handleEasterEggClick = () => {
+    setEasterEggExpanded(!easterEggExpanded)
+    const newCount = easterEggClicks + 1
+    setEasterEggClicks(newCount)
+
+    if (newCount >= 5) {
+      setMetaRoast("Clicking it repeatedly won't change reality. Your taste is still questionable.")
+    } else if (newCount >= 3) {
+      setMetaRoast("Still clicking? The warning doesn't get funnier.")
+    }
+  }
+
+  // Track time range switches
+  const handleTimeRangeChange = (newTimeRange: TimeRange) => {
+    setTimeRange(newTimeRange)
+
+    // Track switches
+    const newSwitchCount = timeRangeSwitches + 1
+    setTimeRangeSwitches(newSwitchCount)
+
+    if (newSwitchCount >= 7) {
+      setMetaRoast("This is just sad. Accept it. Your music taste is a problem across all timelines.")
+    } else if (newSwitchCount >= 5) {
+      setMetaRoast("Stop. The data doesn't lie. Your taste is consistently questionable.")
+    } else if (newSwitchCount >= 3) {
+      setMetaRoast("Desperately refreshing won't improve your taste. It's bad in all time periods.")
+    }
+  }
 
   // Cycle through loading messages
   useEffect(() => {
@@ -246,51 +458,65 @@ function RoastContent() {
       )}
 
       {/* Title - Top Center */}
-      <motion.div
-        className="text-center mb-4 mt-12"
-        initial={{ opacity: 0, y: -30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-      >
-        <h1
-          className="text-5xl md:text-6xl tracking-wider mb-2"
-          style={{
-            fontFamily: "var(--font-bitcount)",
-            fontWeight: 300,
-            color: '#1ED760'
-          }}
-        >
-          {titleText}
-        </h1>
-        <p
-          className="text-gray-500 text-lg"
-          style={{ fontFamily: "var(--font-geist)", fontWeight: 200 }}
-        >
-          {usernameText}
-        </p>
-      </motion.div>
-
-      {/* Special Badge Display */}
-      {specialBadge && !isLoading && (
         <motion.div
-          className="flex justify-center px-4 mb-4"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0 }}
+          className="text-center mb-4 mt-12"
+          initial={{ opacity: 0, y: -30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
         >
-          <div className="bg-[#191414] border-2 border-[#1ED760] rounded-lg px-6 py-4 shadow-[4px_4px_0px_0px_rgba(29,185,84,0.4)] max-w-2xl">
-            <p
-              className="text-[#1ED760] text-center text-base md:text-lg leading-relaxed"
+          <h1
+            className="text-5xl md:text-6xl tracking-wider mb-2"
+            style={{
+              fontFamily: "var(--font-bitcount)",
+              fontWeight: 300,
+              color: '#1ED760'
+            }}
+          >
+            {titleText}
+          </h1>
+          <p
+            className="text-gray-500 text-lg"
+            style={{ fontFamily: "var(--font-geist)", fontWeight: 200 }}
+          >
+            {usernameText}
+          </p>
+        </motion.div>
+
+      {/* Dynamic Banner - Shows highest priority message */}
+      {!isLoading && (metaRoast || easterEgg || specialBadge) && (() => {
+        // Priority: Meta-roast > Easter egg > Special badge
+        const displayMessage = metaRoast || easterEgg || specialBadge
+        const borderColor = metaRoast ? '#ffaa00' : easterEgg ? '#d96565' : '#1ED760'
+        const textColor = metaRoast ? '#ffaa00' : easterEgg ? '#d96565' : '#1ED760'
+
+        return (
+          <motion.div
+            className="flex justify-center px-4 mb-4"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0 }}
+          >
+            <div
+              className="bg-[#191414] border-2 rounded-lg px-6 py-4 max-w-2xl"
               style={{
-                fontFamily: "var(--font-geist)",
-                fontWeight: 400,
+                borderColor: borderColor,
+                boxShadow: `4px 4px 0px 0px ${borderColor}66`,
               }}
             >
-              {specialBadge}
-            </p>
-          </div>
-        </motion.div>
-      )}
+              <p
+                className="text-center text-sm md:text-base leading-relaxed"
+                style={{
+                  fontFamily: "var(--font-geist)",
+                  fontWeight: 300,
+                  color: textColor,
+                }}
+              >
+                {displayMessage}
+              </p>
+            </div>
+          </motion.div>
+        )
+      })()}
 
       {/* Main Content - Ghost Left, Cards Right - Full Width */}
       <div className="flex flex-col lg:flex-row gap-12 items-start justify-between px-4 lg:px-16 mt-8">
@@ -311,7 +537,7 @@ function RoastContent() {
             ].map((option) => (
               <motion.button
                 key={option.value}
-                onClick={() => setTimeRange(option.value)}
+                onClick={() => handleTimeRangeChange(option.value)}
                 className={`
                   relative px-6 py-2 rounded-lg font-semibold text-sm transition-all
                   border-2
@@ -518,11 +744,12 @@ function RoastContent() {
           })}
         </div>
       </div>
+      {/* End Main Content */}
 
       {/* Footer */}
       {!isLoading && (
         <motion.div
-          className="mt-16 text-center pb-8"
+          className="mt-16 pb-8 text-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 1.5 }}
