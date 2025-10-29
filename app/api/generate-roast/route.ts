@@ -233,6 +233,10 @@ export async function POST(request: Request) {
       specialBadge = `HAUNTED PLAYLIST DETECTED - You listen to ${mysteriousFound.join(', ')}. We couldn't find them either. Are they demons? Are YOU okay?`
     } else if (nostalgiaCount >= 2) {
       specialBadge = "STUCK IN 2007 - Your top artists peaked when flip phones were cool. Time is a flat circle for you."
+    } else if (top100Count >= 4) {
+      specialBadge = "ALGORITHM'S FAVORITE - You listen to enough popular artists that Spotify doesn't have to work hard. You're predictable, but at least you're easy."
+    } else {
+      specialBadge = "CURATED CHAOS - Your taste is a confusing mix that has Spotify's algorithm questioning its life choices. Neither basic nor cool. Just... concerning."
     }
 
     // Format data for the AI

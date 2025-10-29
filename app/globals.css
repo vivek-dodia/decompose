@@ -220,8 +220,12 @@
 @layer base {
   * {
     @apply border-border;
+    cursor: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5.5 3L19.5 12L11 15L8 23.5L5.5 3Z' fill='%231ED760' stroke='%231ED760' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") 0 0, auto;
   }
   body {
     @apply bg-background text-foreground;
+  }
+  button, a, [role="button"] {
+    cursor: url("data:image/svg+xml,%3Csvg width='28' height='28' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5.5 3L19.5 12L11 15L8 23.5L5.5 3Z' fill='%231DB954' stroke='%231DB954' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") 0 0, pointer !important;
   }
 }
