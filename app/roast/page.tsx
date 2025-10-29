@@ -407,10 +407,11 @@ function RoastContent() {
 
   return (
     <div
-      className="min-h-screen bg-[#191414] p-8 relative overflow-hidden"
+      className="min-h-screen bg-[#191414] p-6 relative overflow-hidden"
       style={{
         opacity: selectedEffect === 7 || selectedEffect === 8 ? flicker : 1,
-        transition: 'opacity 0.05s'
+        transition: 'opacity 0.05s',
+        zoom: 0.9
       }}
     >
       {/* Full page scanline effect */}
