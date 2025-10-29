@@ -344,22 +344,13 @@ function RoastContent() {
             >
               <div className="bg-[#191414] border-2 border-[#1ED760] rounded-lg px-4 py-3 shadow-[3px_3px_0px_0px_rgba(29,185,84,0.4)] text-left">
                 <p
-                  className="text-gray-400 text-sm mb-1"
+                  className="text-gray-400 text-sm"
                   style={{
                     fontFamily: "var(--font-geist)",
                     fontWeight: 300,
                   }}
                 >
                   You're the <span className="text-[#1ED760] font-semibold">{totalRoasts.toLocaleString()}</span>{totalRoasts === 1 ? 'st' : totalRoasts === 2 ? 'nd' : totalRoasts === 3 ? 'rd' : 'th'} person roasted
-                </p>
-                <p
-                  className="text-gray-500 text-xs"
-                  style={{
-                    fontFamily: "var(--font-geist)",
-                    fontWeight: 300,
-                  }}
-                >
-                  Avg therapy bills: $∞
                 </p>
               </div>
             </motion.div>
@@ -419,7 +410,7 @@ function RoastContent() {
               whileHover={{ scale: 1.05, rotate: 2 }}
               whileTap={{ scale: 0.95 }}
             >
-              roast another victim
+              logout
             </motion.a>
           </motion.div>
         </div>
@@ -527,6 +518,28 @@ function RoastContent() {
           })}
         </div>
       </div>
+
+      {/* Footer */}
+      {!isLoading && (
+        <motion.div
+          className="mt-16 text-center pb-8"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 1.5 }}
+        >
+          <p className="text-gray-500 text-sm" style={{ fontFamily: "var(--font-geist)", fontWeight: 300 }}>
+            built by{" "}
+            <a
+              href="https://github.com/vivek-dodia/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#1ED760] hover:text-[#1DB954] transition-colors underline"
+            >
+              vivek
+            </a>
+          </p>
+        </motion.div>
+      )}
 
     </div>
   )

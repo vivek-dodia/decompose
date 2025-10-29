@@ -268,6 +268,26 @@ export default function Home() {
           </motion.div>
         </motion.div>
       </div>
+
+      {/* Footer */}
+      <motion.div
+        className="absolute bottom-8 left-0 right-0 text-center"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6, delay: 1 }}
+      >
+        <p className="text-gray-500 text-sm" style={{ fontFamily: "var(--font-geist)", fontWeight: 300 }}>
+          built by{" "}
+          <a
+            href="https://github.com/vivek-dodia/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[#1ED760] hover:text-[#1DB954] transition-colors underline"
+          >
+            vivek
+          </a>
+        </p>
+      </motion.div>
     </div>
   )
 }
