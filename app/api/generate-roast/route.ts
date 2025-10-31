@@ -48,7 +48,7 @@ If certain data is missing, roast them for that instead:
 - Generic top 40 only? → "The algorithm gave up on you. You're musically unsalvageable."
 
 OUTPUT STRUCTURE:
-Generate exactly these 8 sections with MAXIMUM CHAOS. **Keep each section to 5-6 SHORT punchy bullet points (max ~500-700 characters total per section)** to fill the cards completely:
+Generate exactly these 8 sections with MAXIMUM CHAOS. **Keep each section to 4-5 SHORT punchy lines (max 400-500 characters total per section)** - concise but impactful:
 
 1. MUSICAL IDENTITY CRISIS
 - Analyze their ACTUAL genre spread vs what they probably claim
@@ -119,7 +119,7 @@ CRITICAL RULES - READ THIS CAREFULLY:
   - "You follow 1 artist but have 20 playlists" → what does this say?
   - "All your top songs are from 2015" → you're stuck in the past
   - "Playlist called 'workout' but it's all The Weeknd" → delusion detected
-- **Keep each section to 5-6 SHORT punchy bullet points (500-700 chars total)**
+- **Keep each section to 4-5 SHORT punchy lines (400-500 chars max) - concise but impactful**
 - **DON'T FABRICATE NUMBERS**: No fake play counts. Use relative language:
   - "#1 most played song" ✓  vs "You played X 900 times" ✗
   - "Dominates your top 5" ✓  vs "You listened 500 times" ✗
@@ -241,20 +241,28 @@ export async function POST(request: Request) {
 
     // Format data for the AI
     const timeRangeLabel = timeRange === 'short_term' ? 'Last Month' : timeRange === 'medium_term' ? 'Last 6 Months' : 'All Time'
+
+    // Debug: Log playlists being sent to AI
+    console.log('=== ROAST GENERATION DEBUG ===')
+    console.log('Total playlists available:', spotifyData.playlists.length)
+    console.log('Sending ALL playlists to AI for maximum variety')
+    console.log('Sample of playlists:', spotifyData.playlists.slice(0, 5).map(p => p.name))
+    console.log('==============================')
+
     const userDataPrompt = `
 USER'S SPOTIFY DATA (${timeRangeLabel.toUpperCase()}):
 
-TOP ARTISTS (in order of most listened):
-${spotifyData.topArtists.slice(0, 5).map((artist, i) => `${i + 1}. ${artist.name} - Genres: ${artist.genres.join(', ') || 'Unknown'}`).join('\n')}
+TOP ARTISTS (ALL ${spotifyData.topArtists.length} in order of most listened):
+${spotifyData.topArtists.map((artist, i) => `${i + 1}. ${artist.name} - Genres: ${artist.genres.join(', ') || 'Unknown'}`).join('\n')}
 
-TOP TRACKS:
-${spotifyData.topTracks.slice(0, 5).map((track, i) => `${i + 1}. "${track.name}" by ${track.artists.map(a => a.name).join(', ')}`).join('\n')}
+TOP TRACKS (ALL ${spotifyData.topTracks.length}):
+${spotifyData.topTracks.map((track, i) => `${i + 1}. "${track.name}" by ${track.artists.map(a => a.name).join(', ')}`).join('\n')}
 
-RECENTLY PLAYED:
-${spotifyData.recentlyPlayed.slice(0, 10).map((track, i) => `${i + 1}. "${track.name}" by ${track.artists.map(a => a.name).join(', ')}`).join('\n')}
+RECENTLY PLAYED (ALL ${spotifyData.recentlyPlayed.length} recent tracks):
+${spotifyData.recentlyPlayed.map((track, i) => `${i + 1}. "${track.name}" by ${track.artists.map(a => a.name).join(', ')}`).join('\n')}
 
-PLAYLISTS:
-${spotifyData.playlists.length > 0 ? spotifyData.playlists.slice(0, 10).map((playlist, i) => `${i + 1}. "${playlist.name}" (${playlist.tracks.total} songs)`).join('\n') : 'No playlists found (roast them for this!)'}
+PLAYLISTS (ALL ${spotifyData.playlists.length} PLAYLISTS):
+${spotifyData.playlists.length > 0 ? spotifyData.playlists.map((playlist, i) => `${i + 1}. "${playlist.name}" (${playlist.tracks.total} songs)`).join('\n') : 'No playlists found (roast them for this!)'}
 
 STATS:
 - Saved Tracks: ${spotifyData.savedTracks}

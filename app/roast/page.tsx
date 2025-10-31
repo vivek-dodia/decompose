@@ -407,11 +407,12 @@ function RoastContent() {
 
   return (
     <div
-      className="min-h-screen bg-[#191414] p-6 relative overflow-hidden"
+      className="bg-[#191414] p-6 relative overflow-hidden"
       style={{
         opacity: selectedEffect === 7 || selectedEffect === 8 ? flicker : 1,
         transition: 'opacity 0.05s',
-        zoom: 0.9
+        zoom: 0.9,
+        minHeight: '111.111vh'
       }}
     >
       {/* Full page scanline effect */}
@@ -747,15 +748,15 @@ function RoastContent() {
       </div>
       {/* End Main Content */}
 
-      {/* Footer */}
+      {/* Footer - Always at bottom */}
       {!isLoading && (
         <motion.div
-          className="mt-16 pb-8 text-center"
+          className="absolute bottom-8 left-0 right-0 text-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 1.5 }}
         >
-          <p className="text-gray-500 text-sm" style={{ fontFamily: "var(--font-geist)", fontWeight: 300 }}>
+          <p className="text-gray-500 text-base" style={{ fontFamily: "var(--font-geist)", fontWeight: 300 }}>
             built by{" "}
             <a
               href="https://github.com/vivek-dodia/"
