@@ -6,13 +6,13 @@ A web app that roasts your Spotify music taste using AI. Get brutally honest fee
 
 ## Features
 
-- 🎵 Spotify OAuth integration for secure authentication
-- 🤖 AI-powered roasts using OpenRouter (Grok model)
-- 📊 Analyzes top artists, tracks, playlists, and listening patterns
-- 🏆 Special badges for unique music taste categories
-- 🎨 Glitch effects and animations on landing page
-- 📱 Roast counter with persistent database storage
-- 🖼️ Screenshot sharing functionality
+- Spotify OAuth integration for secure authentication
+- AI-powered roasts using OpenRouter (Grok model)
+- Analyzes top artists, tracks, playlists, and listening patterns
+- Special badges for unique music taste categories
+- Glitch effects and animations on landing page
+- Roast counter with persistent database storage
+- Screenshot sharing functionality
 
 ## Tech Stack
 
@@ -138,7 +138,7 @@ https://decompose.lol/api/auth/callback/spotify
 https://www.decompose.lol/api/auth/callback/spotify
 ```
 
-⚠️ **Important:** Include both `www` and non-`www` versions!
+**Important:** Include both `www` and non-`www` versions!
 
 ### 5. Initialize Production Database
 
@@ -201,12 +201,12 @@ decompose/
 
 | Variable | Description | Required |
 |----------|-------------|----------|
-| `SPOTIFY_CLIENT_ID` | Spotify app client ID | ✅ |
-| `SPOTIFY_CLIENT_SECRET` | Spotify app secret | ✅ |
-| `AUTH_SECRET` | NextAuth encryption secret | ✅ |
+| `SPOTIFY_CLIENT_ID` | Spotify app client ID | Yes |
+| `SPOTIFY_CLIENT_SECRET` | Spotify app secret | Yes |
+| `AUTH_SECRET` | NextAuth encryption secret | Yes |
 | `NEXTAUTH_URL` | Production domain (e.g., https://decompose.lol) | Production only |
-| `OPENROUTER_API_KEY` | OpenRouter API key | ✅ |
-| `OPENROUTER_MODEL` | AI model to use | ✅ |
+| `OPENROUTER_API_KEY` | OpenRouter API key | Yes |
+| `OPENROUTER_MODEL` | AI model to use | Yes |
 | `POSTGRES_URL` | Database connection string | Production only |
 
 ## Known Issues & Future Work
