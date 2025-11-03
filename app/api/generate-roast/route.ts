@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
 import { fetchSpotifyData } from '@/lib/spotify'
 import fs from 'fs'
 import path from 'path'
@@ -192,18 +194,24 @@ function incrementRoastCounter() {
     fs.writeFileSync(STATS_FILE_PATH, JSON.stringify(stats, null, 2))
     return stats.totalRoasts
   } catch (error) {
-    console.error('Error incrementing roast counter:', error)
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Error incrementing roast counter:', error)
+    }
     return 0
   }
 }
 
 export async function POST(request: Request) {
   try {
-    const { accessToken, timeRange = 'medium_term' } = await request.json()
+    // Get session from NextAuth
+    const session = await getServerSession(authOptions)
 
-    if (!accessToken) {
-      return NextResponse.json({ error: 'Access token is required' }, { status: 400 })
+    if (!session || !session.accessToken) {
+      return NextResponse.json({ error: 'Not authenticated. Please log in.' }, { status: 401 })
     }
+
+    const { timeRange = 'medium_term' } = await request.json()
+    const accessToken = session.accessToken
 
     // Validate timeRange
     const validTimeRanges = ['short_term', 'medium_term', 'long_term']
@@ -242,12 +250,14 @@ export async function POST(request: Request) {
     // Format data for the AI
     const timeRangeLabel = timeRange === 'short_term' ? 'Last Month' : timeRange === 'medium_term' ? 'Last 6 Months' : 'All Time'
 
-    // Debug: Log playlists being sent to AI
-    console.log('=== ROAST GENERATION DEBUG ===')
-    console.log('Total playlists available:', spotifyData.playlists.length)
-    console.log('Sending ALL playlists to AI for maximum variety')
-    console.log('Sample of playlists:', spotifyData.playlists.slice(0, 5).map(p => p.name))
-    console.log('==============================')
+    // Debug: Log playlists being sent to AI (development only)
+    if (process.env.NODE_ENV === 'development') {
+      console.log('=== ROAST GENERATION DEBUG ===')
+      console.log('Total playlists available:', spotifyData.playlists.length)
+      console.log('Sending ALL playlists to AI for maximum variety')
+      console.log('Sample of playlists:', spotifyData.playlists.slice(0, 5).map(p => p.name))
+      console.log('==============================')
+    }
 
     const userDataPrompt = `
 USER'S SPOTIFY DATA (${timeRangeLabel.toUpperCase()}):
@@ -300,9 +310,11 @@ Based on this data, generate a roast following the format specified in the syste
 
     if (!response.ok) {
       const errorText = await response.text()
-      console.error('OpenRouter API error:', errorText)
+      if (process.env.NODE_ENV === 'development') {
+        console.error('OpenRouter API error:', errorText)
+      }
       return NextResponse.json(
-        { error: 'Failed to generate roast', details: errorText },
+        { error: 'Failed to generate roast' },
         { status: response.status }
       )
     }
@@ -319,8 +331,10 @@ Based on this data, generate a roast following the format specified in the syste
     try {
       roasts = JSON.parse(roastContent)
     } catch (parseError) {
-      console.error('JSON Parse Error:', parseError)
-      console.error('Raw content:', roastContent)
+      if (process.env.NODE_ENV === 'development') {
+        console.error('JSON Parse Error:', parseError)
+        console.error('Raw content:', roastContent)
+      }
 
       // Try to fix common JSON issues (unescaped quotes, etc.)
       try {
@@ -329,7 +343,7 @@ Based on this data, generate a roast following the format specified in the syste
         roasts = JSON.parse(cleanedContent)
       } catch (retryError) {
         return NextResponse.json(
-          { error: 'Failed to parse roast response', details: 'Invalid JSON from AI' },
+          { error: 'Failed to parse roast response' },
           { status: 500 }
         )
       }
@@ -340,9 +354,11 @@ Based on this data, generate a roast following the format specified in the syste
 
     return NextResponse.json({ roasts, specialBadge, totalRoasts })
   } catch (error) {
-    console.error('Error generating roast:', error)
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Error generating roast:', error)
+    }
     return NextResponse.json(
-      { error: 'Internal server error', details: error instanceof Error ? error.message : 'Unknown error' },
+      { error: 'Internal server error' },
       { status: 500 }
     )
   }

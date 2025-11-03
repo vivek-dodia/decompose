@@ -6,6 +6,7 @@ import { MeshGradientSVG } from "@/components/mesh-gradient-svg"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
+import { signIn } from "next-auth/react"
 
 export default function Home() {
   const router = useRouter()
@@ -19,7 +20,9 @@ export default function Home() {
   useEffect(() => {
     const randomEffect = Math.floor(Math.random() * 9)
     setSelectedEffect(randomEffect)
-    console.log(`Effect ${randomEffect + 1} activated!`)
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`Effect ${randomEffect + 1} activated!`)
+    }
   }, [])
 
   // Effect 3: Micro-glitches (and Effect 9: All)
@@ -77,8 +80,8 @@ export default function Home() {
   }, [selectedEffect])
 
   const handleSpotifyLogin = () => {
-    // Redirect to Spotify OAuth flow
-    window.location.href = '/api/auth/spotify'
+    // Use NextAuth signIn function with Spotify provider
+    signIn('spotify', { callbackUrl: '/roast' })
   }
 
   // Get effect-specific classes for button

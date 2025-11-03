@@ -2,6 +2,7 @@ import type React from "react"
 import type { Metadata } from "next"
 import localFont from "next/font/local"
 import { Analytics } from "@vercel/analytics/next"
+import { AuthProvider } from "@/components/session-provider"
 import "./globals.css"
 
 const bitcountFont = localFont({
@@ -33,7 +34,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${bitcountFont.variable} ${geistFont.variable}`}>
       <body className="antialiased" style={{ fontFamily: "var(--font-geist)", fontWeight: 200 }}>
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
         <Analytics />
       </body>
     </html>

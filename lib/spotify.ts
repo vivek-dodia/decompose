@@ -52,14 +52,16 @@ export async function fetchSpotifyData(
       followingRes.json(),
     ])
 
-    // Debug logging
-    console.log('=== SPOTIFY DATA DEBUG ===')
-    console.log('Total playlists returned:', playlists.items?.length || 0)
-    console.log('Playlist total from API:', playlists.total)
-    console.log('First 10 playlist names:', playlists.items?.slice(0, 10).map((p: any) => p.name))
-    console.log('Top 5 artists:', topArtists.items?.slice(0, 5).map((a: any) => a.name))
-    console.log('Top 5 tracks:', topTracks.items?.slice(0, 5).map((t: any) => t.name))
-    console.log('========================')
+    // Debug logging (development only)
+    if (process.env.NODE_ENV === 'development') {
+      console.log('=== SPOTIFY DATA DEBUG ===')
+      console.log('Total playlists returned:', playlists.items?.length || 0)
+      console.log('Playlist total from API:', playlists.total)
+      console.log('First 10 playlist names:', playlists.items?.slice(0, 10).map((p: any) => p.name))
+      console.log('Top 5 artists:', topArtists.items?.slice(0, 5).map((a: any) => a.name))
+      console.log('Top 5 tracks:', topTracks.items?.slice(0, 5).map((t: any) => t.name))
+      console.log('========================')
+    }
 
     return {
       topTracks: topTracks.items || [],
@@ -70,7 +72,9 @@ export async function fetchSpotifyData(
       following: following.artists?.total || 0,
     }
   } catch (error) {
-    console.error('Error fetching Spotify data:', error)
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Error fetching Spotify data:', error)
+    }
     throw error
   }
 }

@@ -1,9 +1,9 @@
 "use client"
 
 import { MeshGradientSVG } from "@/components/mesh-gradient-svg"
-import { useSearchParams } from "next/navigation"
 import { motion } from "framer-motion"
 import { Suspense, useEffect, useState } from "react"
+import { useSession } from "next-auth/react"
 
 interface RoastData {
   musical_identity_crisis: string
@@ -160,9 +160,9 @@ function getEasterEgg(): string {
 }
 
 function RoastContent() {
-  const searchParams = useSearchParams()
-  const username = searchParams.get("username") || "Anonymous"
-  const accessToken = searchParams.get("access_token")
+  const { data: session, status } = useSession()
+  const username = session?.user?.name || "Anonymous"
+  const accessToken = session?.accessToken
   const [selectedEffect, setSelectedEffect] = useState<number>(0)
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
   const [flicker, setFlicker] = useState(1)
@@ -198,7 +198,9 @@ function RoastContent() {
   useEffect(() => {
     const randomEffect = Math.floor(Math.random() * 9)
     setSelectedEffect(randomEffect)
-    console.log(`Roast page - Effect ${randomEffect + 1} activated!`)
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`Roast page - Effect ${randomEffect + 1} activated!`)
+    }
   }, [])
 
   // Set easter egg on mount
@@ -207,13 +209,31 @@ function RoastContent() {
     setEasterEgg(egg)
   }, [])
 
-  // Check for return visitor
+  // Check for return visitor (expires after 24 hours)
   useEffect(() => {
-    const hasVisited = localStorage.getItem('decompose_visited')
-    if (hasVisited) {
-      setMetaRoast("Back for more? Either brave or masochistic.")
+    const visitData = localStorage.getItem('decompose_visited')
+    const now = Date.now()
+    const oneDayInMs = 24 * 60 * 60 * 1000 // 24 hours in milliseconds
+
+    if (visitData) {
+      try {
+        const { timestamp } = JSON.parse(visitData)
+        const timeSinceVisit = now - timestamp
+
+        // If visited within last 24 hours, show meta-roast
+        if (timeSinceVisit < oneDayInMs) {
+          setMetaRoast("Back for more? Either brave or masochistic.")
+        } else {
+          // Expired - treat as new visitor
+          localStorage.setItem('decompose_visited', JSON.stringify({ timestamp: now }))
+        }
+      } catch (e) {
+        // Invalid data - reset
+        localStorage.setItem('decompose_visited', JSON.stringify({ timestamp: now }))
+      }
     } else {
-      localStorage.setItem('decompose_visited', 'true')
+      // First visit
+      localStorage.setItem('decompose_visited', JSON.stringify({ timestamp: now }))
     }
   }, [])
 
@@ -280,9 +300,18 @@ function RoastContent() {
   // Fetch roast data
   useEffect(() => {
     const generateRoast = async () => {
-      if (!accessToken) {
+      // Check if user is authenticated
+      if (status === 'loading') {
+        return // Still loading session
+      }
+
+      if (!session || !accessToken) {
         setError("No access token found. Please log in again.")
         setIsLoading(false)
+        // Redirect to home after a delay
+        setTimeout(() => {
+          window.location.href = '/'
+        }, 2000)
         return
       }
 
@@ -294,7 +323,7 @@ function RoastContent() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ accessToken, timeRange }),
+          body: JSON.stringify({ timeRange }),
         })
 
         if (!response.ok) {
@@ -307,14 +336,16 @@ function RoastContent() {
         setTotalRoasts(data.totalRoasts || 0)
         setIsLoading(false)
       } catch (err) {
-        console.error('Error generating roast:', err)
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Error generating roast:', err)
+        }
         setError('Failed to generate roast. Please try again.')
         setIsLoading(false)
       }
     }
 
     generateRoast()
-  }, [accessToken, timeRange])
+  }, [session, timeRange, status])
 
   // Effect 3: Micro-glitches
   useEffect(() => {
