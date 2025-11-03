@@ -2,8 +2,7 @@ import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { fetchSpotifyData } from '@/lib/spotify'
-import fs from 'fs'
-import path from 'path'
+import { incrementRoastCount } from '@/lib/db'
 
 const SYSTEM_PROMPT = `You are a ruthlessly sarcastic music critic for "decompose.lol" - an app that roasts users' Spotify listening habits. Your personality is witty, UNHINGED, and brutally honest. You're the ghost mascot who's seen too much and has lost all filter.
 
@@ -176,30 +175,7 @@ const MYSTERIOUS_ARTISTS = ["KPop Demon Hunters Cast", "sombr", "EJAE", "REI AMI
 const NOSTALGIA_2000S = ["Britney Spears", "USHER", "50 Cent", "Ne-Yo", "Black Eyed Peas"]
 
 // Helper functions for counter
-const STATS_FILE_PATH = path.join(process.cwd(), 'data', 'stats.json')
-
-function getStats() {
-  try {
-    const data = fs.readFileSync(STATS_FILE_PATH, 'utf-8')
-    return JSON.parse(data)
-  } catch (error) {
-    return { totalRoasts: 0 }
-  }
-}
-
-function incrementRoastCounter() {
-  try {
-    const stats = getStats()
-    stats.totalRoasts += 1
-    fs.writeFileSync(STATS_FILE_PATH, JSON.stringify(stats, null, 2))
-    return stats.totalRoasts
-  } catch (error) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('Error incrementing roast counter:', error)
-    }
-    return 0
-  }
-}
+// Database functions are now in lib/db.ts
 
 export async function POST(request: Request) {
   try {
@@ -350,7 +326,7 @@ Based on this data, generate a roast following the format specified in the syste
     }
 
     // Increment roast counter
-    const totalRoasts = incrementRoastCounter()
+    const totalRoasts = await incrementRoastCount()
 
     return NextResponse.json({ roasts, specialBadge, totalRoasts })
   } catch (error) {
