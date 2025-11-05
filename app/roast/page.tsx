@@ -3,7 +3,7 @@
 import { MeshGradientSVG } from "@/components/mesh-gradient-svg"
 import { motion } from "framer-motion"
 import { Suspense, useEffect, useState } from "react"
-import { useSession } from "next-auth/react"
+import { useSession, signOut } from "next-auth/react"
 
 interface RoastData {
   musical_identity_crisis: string
@@ -489,6 +489,22 @@ function RoastContent() {
           }}
         />
       )}
+
+      {/* Switch Account Button - Top Right */}
+      <motion.div
+        className="absolute top-6 right-6 z-50"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5 }}
+      >
+        <button
+          onClick={() => signOut({ callbackUrl: '/' })}
+          className="bg-black/50 hover:bg-black/70 border border-[#1DB954]/30 hover:border-[#1DB954] text-gray-400 hover:text-[#1DB954] px-4 py-2 rounded-lg transition-all duration-200 text-sm font-medium"
+          style={{ fontFamily: "var(--font-geist)" }}
+        >
+          Switch Account
+        </button>
+      </motion.div>
 
       {/* Title - Top Center */}
         <motion.div
