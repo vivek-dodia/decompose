@@ -490,22 +490,6 @@ function RoastContent() {
         />
       )}
 
-      {/* Switch Account Button - Top Right */}
-      <motion.div
-        className="absolute top-6 right-6 z-50"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.5 }}
-      >
-        <button
-          onClick={() => signOut({ callbackUrl: '/' })}
-          className="bg-black/50 hover:bg-black/70 border border-[#1DB954]/30 hover:border-[#1DB954] text-gray-400 hover:text-[#1DB954] px-4 py-2 rounded-lg transition-all duration-200 text-sm font-medium"
-          style={{ fontFamily: "var(--font-geist)" }}
-        >
-          Switch Account
-        </button>
-      </motion.div>
-
       {/* Title - Top Center */}
         <motion.div
           className="text-center mb-4 mt-12"
@@ -678,15 +662,15 @@ function RoastContent() {
               <div className="absolute -inset-1 bg-gradient-to-r from-[#1DB954] via-[#1ED760] to-[#1DB954] rounded-lg opacity-50 blur-sm animate-gradient-rotate" />
             )}
 
-            <motion.a
-              href="/"
+            <motion.button
+              onClick={() => signOut({ callbackUrl: '/' })}
               className="relative block px-8 py-3 bg-[#1ED760] text-[#191414] rounded-lg font-semibold text-lg hover:bg-[#1DB954] transition-all shadow-[4px_4px_0px_0px_rgba(29,185,84,0.3)] hover:shadow-[6px_6px_0px_0px_rgba(29,185,84,0.5)]"
               style={{ fontFamily: "var(--font-geist)", fontWeight: 500 }}
               whileHover={{ scale: 1.05, rotate: 2 }}
               whileTap={{ scale: 0.95 }}
             >
               logout
-            </motion.a>
+            </motion.button>
           </motion.div>
         </div>
 
