@@ -24,6 +24,14 @@ export const metadata: Metadata = {
   icons: {
     icon: '/icon.svg',
   },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'decompose.lol'
+  },
+  other: {
+    'mobile-web-app-capable': 'yes',
+  }
 }
 
 // Separate viewport export as recommended by Next.js
@@ -32,6 +40,10 @@ export const viewport = {
   initialScale: 1,
   maximumScale: 5,
   userScalable: true,
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#101010' },
+    { media: '(prefers-color-scheme: dark)', color: '#101010' }
+  ]
 }
 
 export default function RootLayout({
