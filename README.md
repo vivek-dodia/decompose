@@ -13,6 +13,9 @@ A web app that roasts your Spotify music taste using AI. Get brutally honest fee
 - Glitch effects and animations on landing page
 - Roast counter with persistent database storage
 - Screenshot sharing functionality
+- **Fully responsive design** for mobile, tablet, and desktop
+- **Cross-browser compatible** (Chrome, Firefox, Safari, Edge)
+- **iOS Safari optimized** with proper theme colors and SVG rendering
 
 ## Tech Stack
 
@@ -209,23 +212,36 @@ decompose/
 | `OPENROUTER_MODEL` | AI model to use | Yes |
 | `POSTGRES_URL` | Database connection string | Production only |
 
-## Known Issues & Future Work
+## Future Enhancements
 
-### Mobile Aspect Ratio
-- **Status:** Needs optimization
-- **Issue:** Layout not fully optimized for mobile screens
-- **Priority:** High
-- **Notes:** Landing page and roast results need responsive design improvements
-
-### Future Enhancements
-- [ ] Mobile-responsive layout
 - [ ] Share roast directly to social media
 - [ ] Multiple AI model options
 - [ ] Roast history for logged-in users
 - [ ] Custom roast intensity settings
 - [ ] Dark/light mode toggle
+- [ ] PWA support with offline functionality
 
 ## Development Notes
+
+### Cross-Browser Compatibility
+- Added vendor prefixes (`-webkit-`, `-moz-`) for animations and transforms
+- Firefox scrollbar styling with `scrollbar-width` and `scrollbar-color`
+- CSS normalization for consistent rendering across browsers
+- Removed non-standard CSS properties (e.g., `zoom`)
+- All features tested on Chrome, Firefox, Safari (desktop & iOS), and Edge
+
+### Mobile Responsive Design
+- Implemented responsive breakpoints (sm: 640px, md: 768px, lg: 1024px, xl: 1280px)
+- Touch targets optimized to 44x44px minimum for accessibility
+- Adaptive text sizing and spacing across all screen sizes
+- Mobile-first approach with progressive enhancement
+- Prevents iOS zoom on input focus (16px minimum font size)
+
+### iOS Safari Optimizations
+- Replaced `foreignObject` SVG with CSS masking for proper rendering
+- Added `theme-color` meta tags to match app background (`#101010`)
+- Configured `apple-web-app` settings for status bar styling
+- Base64-encoded SVG masks for cross-platform compatibility
 
 ### NextAuth v4 Migration
 - Migrated from v5 beta to v4 stable for production readiness
@@ -258,6 +274,16 @@ decompose/
 - Check OpenRouter API key is valid
 - Verify Spotify access token in session
 - Check server logs for specific errors
+
+### SVG not rendering on iOS Safari
+- The ghost SVG uses CSS masking instead of `foreignObject` for iOS compatibility
+- If issues persist, clear Safari cache and hard refresh
+- Ensure you're running the latest version from production
+
+### White bars on iOS Safari
+- The app uses `theme-color` meta tags to match the black background
+- If white bars appear, refresh the page or clear Safari cache
+- Status bar should be translucent black with proper meta tags
 
 ## Contributing
 
