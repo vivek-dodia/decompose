@@ -87,7 +87,7 @@ export default function Home() {
   // Get effect-specific classes for button
   const getEffectClasses = () => {
     const base =
-      "w-full px-8 py-6 bg-[#191414] rounded-xl text-white text-2xl font-semibold transition-all duration-200 tracking-wide hover:rotate-1 border-2 border-transparent hover:border-[#1DB954] cursor-pointer"
+      "w-full px-6 sm:px-8 py-4 sm:py-6 bg-[#191414] rounded-xl text-white text-lg sm:text-xl md:text-2xl font-semibold transition-all duration-200 tracking-wide hover:rotate-1 border-2 border-transparent hover:border-[#1DB954] cursor-pointer"
 
     switch (selectedEffect) {
       case 0: // Scanline overlay
@@ -185,7 +185,7 @@ export default function Home() {
       )}
 
       <motion.h1
-        className="absolute top-[15vh] text-6xl md:text-7xl tracking-wider cursor-default"
+        className="absolute top-[8vh] sm:top-[12vh] lg:top-[15vh] text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-wider cursor-default px-4 text-center"
         style={{ fontFamily: "var(--font-bitcount)", fontWeight: 300 }}
         animate={{
           y: [0, -8, 0],
@@ -206,7 +206,7 @@ export default function Home() {
         ))}
       </motion.h1>
 
-      <div className="flex flex-col items-center gap-[15vh] max-w-lg w-full mt-16">
+      <div className="flex flex-col items-center gap-[8vh] sm:gap-[12vh] lg:gap-[15vh] max-w-lg w-full mt-16 px-4">
         <MeshGradientSVG />
 
         <motion.div
@@ -274,12 +274,12 @@ export default function Home() {
 
       {/* Footer */}
       <motion.div
-        className="absolute bottom-8 left-0 right-0 text-center"
+        className="absolute bottom-4 sm:bottom-8 left-0 right-0 text-center px-4"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 1 }}
       >
-        <p className="text-gray-500 text-sm" style={{ fontFamily: "var(--font-geist)", fontWeight: 300 }}>
+        <p className="text-gray-500 text-xs sm:text-sm" style={{ fontFamily: "var(--font-geist)", fontWeight: 300 }}>
           built by{" "}
           <a
             href="https://github.com/vivek-dodia/"

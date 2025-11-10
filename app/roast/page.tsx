@@ -438,12 +438,11 @@ function RoastContent() {
 
   return (
     <div
-      className="bg-[#191414] p-6 relative overflow-hidden"
+      className="bg-[#191414] p-4 sm:p-6 md:p-8 relative overflow-hidden"
       style={{
         opacity: selectedEffect === 7 || selectedEffect === 8 ? flicker : 1,
         transition: 'opacity 0.05s',
-        zoom: 0.9,
-        minHeight: '111.111vh'
+        minHeight: '100vh'
       }}
     >
       {/* Full page scanline effect */}
@@ -492,13 +491,13 @@ function RoastContent() {
 
       {/* Title - Top Center */}
         <motion.div
-          className="text-center mb-4 mt-12"
+          className="text-center mb-4 mt-6 sm:mt-8 md:mt-12 px-4"
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
           <h1
-            className="text-5xl md:text-6xl tracking-wider mb-2"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-wider mb-2"
             style={{
               fontFamily: "var(--font-bitcount)",
               fontWeight: 300,
@@ -508,7 +507,7 @@ function RoastContent() {
             {titleText}
           </h1>
           <p
-            className="text-gray-500 text-lg"
+            className="text-gray-500 text-sm sm:text-base md:text-lg"
             style={{ fontFamily: "var(--font-geist)", fontWeight: 200 }}
           >
             {usernameText}
@@ -552,13 +551,13 @@ function RoastContent() {
       })()}
 
       {/* Main Content - Ghost Left, Cards Right - Full Width */}
-      <div className="flex flex-col lg:flex-row gap-12 items-start justify-between px-4 lg:px-16 mt-8">
+      <div className="flex flex-col lg:flex-row gap-6 sm:gap-8 lg:gap-12 items-start justify-between px-4 sm:px-6 lg:px-16 mt-4 sm:mt-6 lg:mt-8">
         {/* Ghost SVG - Left Side with Controls */}
-        <div className="flex-shrink-0 flex flex-col items-center gap-8 lg:items-start">
+        <div className="flex-shrink-0 flex flex-col items-center gap-4 sm:gap-6 lg:gap-8 w-full lg:w-auto lg:items-start">
 
           {/* Time Range Filter */}
           <motion.div
-            className="flex gap-3"
+            className="flex flex-wrap justify-center lg:justify-start gap-2 sm:gap-3 w-full"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0 }}
@@ -572,7 +571,7 @@ function RoastContent() {
                 key={option.value}
                 onClick={() => handleTimeRangeChange(option.value)}
                 className={`
-                  relative px-6 py-2 rounded-lg font-semibold text-sm transition-all
+                  relative px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg font-semibold text-xs sm:text-sm transition-all
                   border-2
                   ${timeRange === option.value
                     ? 'bg-[#1ED760] text-[#191414] border-[#1ED760] shadow-[3px_3px_0px_0px_rgba(29,185,84,0.5)]'
@@ -620,15 +619,16 @@ function RoastContent() {
             initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1 }}
+            className="w-full flex justify-center lg:justify-start"
           >
-            <div className="w-80 lg:w-96">
+            <div className="w-64 sm:w-72 md:w-80 lg:w-96">
               <MeshGradientSVG />
             </div>
           </motion.div>
 
           {/* Button - Below Ghost with Effects */}
           <motion.div
-            className="relative"
+            className="relative w-full sm:w-auto"
             initial={{ opacity: 0, y: 30 }}
             animate={{
               opacity: 1,
@@ -664,7 +664,7 @@ function RoastContent() {
 
             <motion.button
               onClick={() => signOut({ callbackUrl: '/' })}
-              className="relative block px-8 py-3 bg-[#1ED760] text-[#191414] rounded-lg font-semibold text-lg hover:bg-[#1DB954] transition-all shadow-[4px_4px_0px_0px_rgba(29,185,84,0.3)] hover:shadow-[6px_6px_0px_0px_rgba(29,185,84,0.5)]"
+              className="relative block w-full sm:w-auto px-6 sm:px-8 py-2.5 sm:py-3 bg-[#1ED760] text-[#191414] rounded-lg font-semibold text-base sm:text-lg hover:bg-[#1DB954] transition-all shadow-[4px_4px_0px_0px_rgba(29,185,84,0.3)] hover:shadow-[6px_6px_0px_0px_rgba(29,185,84,0.5)]"
               style={{ fontFamily: "var(--font-geist)", fontWeight: 500 }}
               whileHover={{ scale: 1.05, rotate: 2 }}
               whileTap={{ scale: 0.95 }}
@@ -675,17 +675,17 @@ function RoastContent() {
         </div>
 
         {/* Roast Cards - Right Side Grid - Full Width */}
-        <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+        <div className="flex-1 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 md:gap-6 w-full">
           {isLoading ? (
-            <div className="col-span-2 flex items-center justify-center min-h-[400px]">
-              <div className="text-center">
+            <div className="col-span-1 md:col-span-2 flex items-center justify-center min-h-[300px] sm:min-h-[400px]">
+              <div className="text-center px-4">
                 <motion.div
                   key={loadingMessageIndex}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.5 }}
-                  className="animate-pulse text-[#1ED760] text-2xl mb-4"
+                  className="animate-pulse text-[#1ED760] text-lg sm:text-xl md:text-2xl mb-4"
                   style={{ fontFamily: "var(--font-bitcount)" }}
                 >
                   {loadingMessages[loadingMessageIndex].main}
@@ -695,7 +695,7 @@ function RoastContent() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.5, delay: 0.2 }}
-                  className="text-gray-500"
+                  className="text-gray-500 text-sm sm:text-base"
                   style={{ fontFamily: "var(--font-geist)" }}
                 >
                   {loadingMessages[loadingMessageIndex].sub}
@@ -703,14 +703,14 @@ function RoastContent() {
               </div>
             </div>
           ) : error ? (
-            <div className="col-span-2 flex items-center justify-center min-h-[400px]">
-              <div className="text-center">
-                <div className="text-red-500 text-2xl mb-4" style={{ fontFamily: "var(--font-bitcount)" }}>
+            <div className="col-span-1 md:col-span-2 flex items-center justify-center min-h-[300px] sm:min-h-[400px]">
+              <div className="text-center px-4">
+                <div className="text-red-500 text-xl sm:text-2xl mb-4" style={{ fontFamily: "var(--font-bitcount)" }}>
                   Error: {error}
                 </div>
                 <a
                   href="/"
-                  className="text-[#1ED760] underline hover:text-[#1DB954]"
+                  className="text-[#1ED760] underline hover:text-[#1DB954] text-sm sm:text-base"
                   style={{ fontFamily: "var(--font-geist)" }}
                 >
                   Try again
@@ -747,13 +747,13 @@ function RoastContent() {
                 )}
 
                 <div
-                  className="bg-[#191414] p-8 rounded-xl border-2 border-[#1ED760] shadow-[4px_4px_0px_0px_rgba(29,185,84,0.3)] hover:shadow-[6px_6px_0px_0px_rgba(29,185,84,0.5)] transition-all relative min-h-[220px] flex flex-col"
+                  className="bg-[#191414] p-4 sm:p-6 md:p-8 rounded-xl border-2 border-[#1ED760] shadow-[4px_4px_0px_0px_rgba(29,185,84,0.3)] hover:shadow-[6px_6px_0px_0px_rgba(29,185,84,0.5)] transition-all relative min-h-[180px] sm:min-h-[200px] md:min-h-[220px] flex flex-col"
                   style={{
                     transform: `rotate(${rotations[index] * 0.5}deg)`,
                   }}
                 >
                   <h3
-                    className="text-[#1ED760] text-xl md:text-2xl font-bold mb-4"
+                    className="text-[#1ED760] text-lg sm:text-xl md:text-2xl font-bold mb-3 sm:mb-4"
                     style={{
                       fontFamily: "var(--font-bitcount)",
                       fontWeight: 600,
@@ -763,7 +763,7 @@ function RoastContent() {
                     {roast.title}
                   </h3>
                   <p
-                    className="text-gray-400 text-base leading-relaxed"
+                    className="text-gray-400 text-sm sm:text-base leading-relaxed"
                     style={{
                       fontFamily: "var(--font-geist)",
                       fontWeight: 200,
@@ -782,12 +782,12 @@ function RoastContent() {
       {/* Footer - Always at bottom */}
       {!isLoading && (
         <motion.div
-          className="absolute bottom-8 left-0 right-0 text-center"
+          className="mt-8 sm:mt-12 md:mt-16 mb-4 sm:mb-6 md:mb-8 text-center px-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 1.5 }}
         >
-          <p className="text-gray-500 text-base" style={{ fontFamily: "var(--font-geist)", fontWeight: 300 }}>
+          <p className="text-gray-500 text-xs sm:text-sm md:text-base" style={{ fontFamily: "var(--font-geist)", fontWeight: 300 }}>
             built by{" "}
             <a
               href="https://github.com/vivek-dodia/"
