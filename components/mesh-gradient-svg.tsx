@@ -57,19 +57,32 @@ export function MeshGradientSVG() {
       }}
       style={{ transformOrigin: "top center" }}
     >
-      <svg xmlns="http://www.w3.org/2000/svg" width="231" height="289" viewBox="0 0 231 289" className="w-full h-auto">
-        <defs>
-          <clipPath id="shapeClip">
-            <path d="M230.809 115.385V249.411C230.809 269.923 214.985 287.282 194.495 288.411C184.544 288.949 175.364 285.718 168.26 280C159.746 273.154 147.769 273.461 139.178 280.23C132.638 285.384 124.381 288.462 115.379 288.462C106.377 288.462 98.1451 285.384 91.6055 280.23C82.912 273.385 70.9353 273.385 62.2415 280.23C55.7532 285.334 47.598 288.411 38.7246 288.462C17.4132 288.615 0 270.667 0 249.359V115.385C0 51.6667 51.6756 0 115.404 0C179.134 0 230.809 51.6667 230.809 115.385Z" />
-          </clipPath>
-        </defs>
+      {/* MeshGradient as background layer - iOS Safari compatible */}
+      <div
+        className="absolute inset-0 overflow-hidden rounded-lg"
+        style={{
+          WebkitMaskImage: "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMzEiIGhlaWdodD0iMjg5IiB2aWV3Qm94PSIwIDAgMjMxIDI4OSI+PHBhdGggZD0iTTIzMC44MDkgMTE1LjM4NVYyNDkuNDExQzIzMC44MDkgMjY5LjkyMyAyMTQuOTg1IDI4Ny4yODIgMTk0LjQ5NSAyODguNDExQzE4NC41NDQgMjg4Ljk0OSAxNzUuMzY0IDI4NS43MTggMTY4LjI2IDI4MEMxNTkuNzQ2IDI3My4xNTQgMTQ3Ljc2OSAyNzMuNDYxIDEzOS4xNzggMjgwLjIzQzEzMi42MzggMjg1LjM4NCAxMjQuMzgxIDI4OC40NjIgMTE1LjM3OSAyODguNDYyQzEwNi4zNzcgMjg4LjQ2MiA5OC4xNDUxIDI4NS4zODQgOTEuNjA1NSAyODAuMjNDODIuOTEyIDI3My4zODUgNzAuOTM1MyAyNzMuMzg1IDYyLjI0MTUgMjgwLjIzQzU1Ljc1MzIgMjg1LjMzNCA0Ny41OTggMjg4LjQxMSAzOC43MjQ2IDI4OC40NjJDMTcuNDEzMiAyODguNjE1IDAgMjcwLjY2NyAwIDI0OS4zNTlWMTE1LjM4NUMwIDUxLjY2NjcgNTEuNjc1NiAwIDExNS40MDQgMEMxNzkuMTM0IDAgMjMwLjgwOSA1MS42NjY3IDIzMC44MDkgMTE1LjM4NVoiLz48L3N2Zz4=')",
+          maskImage: "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMzEiIGhlaWdodD0iMjg5IiB2aWV3Qm94PSIwIDAgMjMxIDI4OSI+PHBhdGggZD0iTTIzMC44MDkgMTE1LjM4NVYyNDkuNDExQzIzMC44MDkgMjY5LjkyMyAyMTQuOTg1IDI4Ny4yODIgMTk0LjQ5NSAyODguNDExQzE4NC41NDQgMjg4Ljk0OSAxNzUuMzY0IDI4NS43MTggMTY4LjI2IDI4MEMxNTkuNzQ2IDI3My4xNTQgMTQ3Ljc2OSAyNzMuNDYxIDEzOS4xNzggMjgwLjIzQzEzMi42MzggMjg1LjM4NCAxMjQuMzgxIDI4OC40NjIgMTE1LjM3OSAyODguNDYyQzEwNi4zNzcgMjg4LjQ2MiA5OC4xNDUxIDI4NS4zODQgOTEuNjA1NSAyODAuMjNDODIuOTEyIDI3My4zODUgNzAuOTM1MyAyNzMuMzg1IDYyLjI0MTUgMjgwLjIzQzU1Ljc1MzIgMjg1LjMzNCA0Ny41OTggMjg4LjQxMSAzOC43MjQ2IDI4OC40NjJDMTcuNDEzMiAyODguNjE1IDAgMjcwLjY2NyAwIDI0OS4zNTlWMTE1LjM4NUMwIDUxLjY2NjcgNTEuNjc1NiAwIDExNS40MDQgMEMxNzkuMTM0IDAgMjMwLjgwOSA1MS42NjY3IDIzMC44MDkgMTE1LjM4NVoiLz48L3N2Zz4=')",
+          WebkitMaskSize: "contain",
+          maskSize: "contain",
+          WebkitMaskRepeat: "no-repeat",
+          maskRepeat: "no-repeat",
+          WebkitMaskPosition: "center",
+          maskPosition: "center"
+        }}
+      >
+        <MeshGradient colors={colors} className="w-full h-full" speed={1} />
+      </div>
 
-        <foreignObject width="231" height="289" clipPath="url(#shapeClip)">
-          <div className="w-full h-full">
-            <MeshGradient colors={colors} className="w-full h-full" speed={1} />
-          </div>
-        </foreignObject>
-
+      {/* SVG with eyes on top */}
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="231"
+        height="289"
+        viewBox="0 0 231 289"
+        className="w-full h-auto relative z-10"
+        style={{ display: "block" }}
+      >
         <motion.ellipse
           rx="20"
           ry="30"
